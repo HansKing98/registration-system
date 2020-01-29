@@ -18,6 +18,9 @@
         }, {
             "path": "pages/add-member/add-member",
             "style": {}
+        }, {
+            "path": "pages/member-detail/member-detail",
+            "style": {}
         }
     ],
     "globalStyle": {
