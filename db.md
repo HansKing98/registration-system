@@ -36,6 +36,12 @@ member
     age: 18, // int
     sex: 0, // int (0女, 1男, 2未知)
     photo: "" // string 图片url地址
+	address: {country: 0, province: 0, city: 0, district: 0, street: ""},（身份证地址信息）
+	city:""//string (市-搜索字段)
+	area:""//(区-搜索字段)
+	address:""//身份证地址
+	regtime:""//（入库时间）
+	
 }
 ```
 
@@ -61,6 +67,34 @@ member_list
     create_time: 0, // 时间戳 GMT
 }
 ```
+
+
+#### 关键字搜索库
+```
+// 增加人员时需要写入备用搜索与统计
+member_check_in_address
+{
+  _id: "", // string，自生成
+  id_card: 0, // 关联身份证ID
+  id_member: 0, //关联新增成员登记ID
+  age: 18, // int
+  sex: 0, // int (0女, 1男, 2未知)
+  xm_name:0,//姓名--搜索
+  in_country: 0, //登记地_搜索国家
+  in_province: 0, //登记地_搜索省
+  in_city: 0, //登记地_搜索市
+  in_district: 0, //登记地_搜索区
+  in_street: 0, //登记地_搜索详细地址
+  form_country: 0, //来自地_搜索国家
+  form_province: 0, //来自地_搜索省
+  form_city: 0, //来自地_搜索市
+  form_district: 0, //来自地_搜索区
+  form_street: 0, //来自地_搜索详细地址
+  create_time: 0, // 时间戳 登记时间 搜索
+  history_time:0,//int 0本月,1三月内,2半年内,3一年内，4三年内,5超过三年。
+}
+```
+
 
 #### 成员操作历史
 ```
