@@ -17,7 +17,7 @@
                 });
 
                 uniCloud.callFunction({
-                    name: 'add-user', // 云函数名
+                    name: 'add-member', // 云函数名
                     data: {}, // 表单数据
                     success: (res) => {
                     },

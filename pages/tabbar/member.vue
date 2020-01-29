@@ -21,7 +21,7 @@
                 });
 
                 uniCloud.callFunction({
-                    name: 'user-list',
+                    name: 'member-list',
                     data: {},
                     success: (res) => {
                         this.fillData(res);
