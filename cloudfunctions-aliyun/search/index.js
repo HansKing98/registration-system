@@ -1,3 +1,4 @@
+//我在做这个文件，我的群昵称是King,QQ:36568008  
 'use strict';
 const db = uniCloud.database()
 exports.main = async (event, context) => {
