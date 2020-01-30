@@ -1,17 +1,13 @@
+	//我在做这个文件，我的群昵称是King,QQ:36568008  
 <template>
-	<!--King上传于2020年1月30日12：40，QQ:36568008-->
 	<view class="fixed">
 		<view class="search uni-flex bg-white" style="align-items: center;">
 			<uni-search-bar @confirm="search" v-model="searchKey"  style="flex:1" />
-			<!-- <input type="text" class="flex-sub" style="padding: 0 20upx;" v-model="searchKey" @confirm="search" placeholder="请输入人名,状态等关键词"
-			 confirm-type="search" />
-			<text class="uni-bg-green" style="padding: 15upx 30upx;">搜索</text> -->
 		</view>
-		<!-- <button type="primary" @tap="add"></button> -->
 		<view class="flex-sub" style="position: relative;">
 			<scroll-view scroll-y="true" style="position: absolute;width: 100%;height: 100%;padding-top: 20upx;" @scrolltolower="next">
 				<uni-list>
-					<uni-list-item v-for="(item,index) in list" :key="index"  @click="openDetail(item.id_card)" :title="item.name" :note="item.address"></uni-list-item>
+					<uni-list-item v-for="(item,index) in list" :key="index"  @click="openDetail(item._id)" :title="item.name" :note="item.address"></uni-list-item>
 				</uni-list>
 				<view class="uni-flex" style="justify-content: center;padding: 10upx;">
 					{{contentText[loadingType]}}
@@ -47,34 +43,6 @@
 			search:function(){
 				_this.reload();
 			},
-			add: function() {
-				// uniCloud.callFunction({
-				// 	name: 'add-member',
-				// 	data: {
-
-				// 		guid:"sdfdsafassasafasdfasdf", // string 用户唯一标识，添加时生成无法修改
-				// 		id_type: 0, // int 证件类型 0 身份证, 1 护照
-				// 		id_card: "510222181851551544", // string 证件号码，需验证符合规则
-				// 		name: "张三", // string 不能为空
-				// 		phone: "13123456789", // string 不能为空，需验证符合规则
-				// 		age: 18, // int
-				// 		sex: 0, // int (0女, 1男, 2未知)
-				// 		photo: "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-unic0430a1/95e8e1b0-430b-11ea-bfb9-1bb194e2d539.jpg", // string 图片url地址
-				// 		address: {
-				// 			country: 0,
-				// 			province: 0,
-				// 			city: 0,
-				// 			district: 0,
-				// 			street: 0
-				// 		},
-				// 		city: "重庆市", //string (市-搜索字段)
-				// 		area: "九龙坡区", //(区-搜索字段)
-				// 		address: "重庆市九龙坡区杨家坪1号", //身份证地址
-				// 		regtime: Date.now() //（入库时间）
-
-				// 	}
-				// });
-			},
 			next() {
 				this.page = this.page + 1;
 				if (this.loadingType !== 0) {
@@ -105,6 +73,11 @@
 					})
 				})
 				
+			},
+			openDetail:function(id){
+				uni.navigateTo({
+					url:'../member-detail/member-detail?id='+id
+				})
 			},
 			reload: function() {
 				_this.page = 1;
