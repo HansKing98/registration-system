@@ -66,8 +66,20 @@ var dateUtils = {
 	}
 };
 
+function formatDate(year, month, day) {
+	return year + '-' + getTwo(month) + '-' + getTwo(day)
+}
+
+function getTwo(num) {
+	if (Number(num) < 10) {
+		return '0' + num;
+	} else {
+		return num
+	}
+}
 module.exports = {
 	formatTime: formatTime,
 	formatLocation: formatLocation,
-	dateUtils: dateUtils
+	dateUtils: dateUtils,
+	formatDate: formatDate
 }

@@ -1,61 +1,66 @@
 {
-    "pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-        {
-            "path": "pages/tabbar/member",
-            "style": {}
-        }, {
-            "path": "pages/tabbar/add",
-            "style": {}
-        }, {
-            "path": "pages/tabbar/search",
-            "style": {}
-        }, {
-            "path": "pages/tabbar/my",
-            "style": {}
-        }, {
-            "path": "pages/login/login",
-            "style": {}
-        }, {
-            "path": "pages/add-member/add-member",
-            "style": {}
-        }, {
-            "path": "pages/member-detail/member-detail",
-            "style": {}
-        }
-    ],
-    "globalStyle": {
-        "navigationBarTextStyle": "black",
-        "navigationBarTitleText": "外来人员登记系统",
-        "navigationBarBackgroundColor": "#F8F8F8",
-        "backgroundColor": "#F8F8F8"
-    },
-    "tabBar": {
-        "color": "#7A7E83",
-        "selectedColor": "#007AFF",
-        "borderStyle": "black",
-        "backgroundColor": "#F8F8F8",
-        "list": [{
-                "pagePath": "pages/tabbar/member",
-                "iconPath": "static/tab_list.png",
-                "selectedIconPath": "static/tab_list_hl.png",
-                "text": "列表"
-            },
-            {
-                "pagePath": "pages/tabbar/add",
-                "iconPath": "static/tab_add.png",
-                "selectedIconPath": "static/tab_add_hl.png",
-                "text": "新增"
-            }, {
-                "pagePath": "pages/tabbar/search",
-                "iconPath": "static/tab_search.png",
-                "selectedIconPath": "static/tab_search_hl.png",
-                "text": "搜索"
-            }, {
-                "pagePath": "pages/tabbar/my",
-                "iconPath": "static/tab_my.png",
-                "selectedIconPath": "static/tab_my_hl.png",
-                "text": "我的"
-            }
-        ]
-    }
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/tabbar/member",
+			"style": {}
+		}, {
+			"path": "pages/tabbar/add",
+			"style": {}
+		}, {
+			"path": "pages/tabbar/search",
+			"style": {}
+		}, {
+			"path": "pages/tabbar/my",
+			"style": {}
+		}, {
+			"path": "pages/login/login",
+			"style": {}
+		}, {
+			"path": "pages/add-member/add-member",
+			"style": {}
+		},
+		{
+			"path": "pages/member-detail/member-detail",
+			"style": {}
+		},
+		{
+			"path": "pages/chart/chart",
+			"style": {}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "外来人员登记系统",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+		"color": "#7A7E83",
+		"selectedColor": "#007AFF",
+		"borderStyle": "black",
+		"backgroundColor": "#F8F8F8",
+		"list": [{
+				"pagePath": "pages/tabbar/member",
+				"iconPath": "static/tab_list.png",
+				"selectedIconPath": "static/tab_list_hl.png",
+				"text": "列表"
+			},
+			{
+				"pagePath": "pages/tabbar/add",
+				"iconPath": "static/tab_add.png",
+				"selectedIconPath": "static/tab_add_hl.png",
+				"text": "新增"
+			}, {
+				"pagePath": "pages/tabbar/search",
+				"iconPath": "static/tab_search.png",
+				"selectedIconPath": "static/tab_search_hl.png",
+				"text": "搜索"
+			}, {
+				"pagePath": "pages/tabbar/my",
+				"iconPath": "static/tab_my.png",
+				"selectedIconPath": "static/tab_my_hl.png",
+				"text": "我的"
+			}
+		]
+	}
 }
