@@ -70,7 +70,6 @@
 			},
 		    //标签搜索
 			tagQuery:function(e){
-				
 			}
 		}
 	}
