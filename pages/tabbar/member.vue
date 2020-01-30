@@ -1,10 +1,7 @@
-//我在做这个文件，我的群昵称是AHello
+//我在做这个文件，我的群昵称是AHello  
 <template>
 	<uni-list>
-		<!-- <uni-list-item title="标题文字" :show-arrow="false"></uni-list-item>
-		<uni-list-item title="标题文字"></uni-list-item>
-		<uni-list-item title="标题文字" :show-badge="true" badge-text="12"></uni-list-item>
-		<uni-list-item title="禁用状态" :disabled="true" :show-badge="true" badge-text="12"></uni-list-item> -->
+		
 	</uni-list>
 </template>
 
