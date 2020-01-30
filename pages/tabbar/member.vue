@@ -1,4 +1,4 @@
-//我在做这个文件，我的群昵称是xxx
+//我在做这个文件，我的群昵称是AHello
 <template>
 	<uni-list>
 		<!-- <uni-list-item title="标题文字" :show-arrow="false"></uni-list-item>
