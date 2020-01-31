@@ -13,6 +13,11 @@
 			"path": "pages/tabbar/my",
 			"style": {}
 		}, {
+			"path": "pages/tabbar/change-pwd",
+            "style": {
+				"navigationBarTitleText" : "设置密码"
+			}
+        },{
 			"path": "pages/login/login",
 			"style": {}
 		}, {

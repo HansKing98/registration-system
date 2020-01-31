@@ -43,7 +43,7 @@
 			//修改密码
 			modifyPwd() {				
 				uni.navigateTo({
-					url: ''
+					url: 'change-pwd'
 				})
 			},
 			//关于我们
@@ -53,9 +53,9 @@
 				})
 			},
 			//退出
-			exit(myurl) {				
+			exit() {			
 				uni.navigateTo({
-					url: ''
+					url: 'login'
 				})
 			},
 		}
