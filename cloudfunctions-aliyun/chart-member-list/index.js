@@ -1,5 +1,4 @@
 // 我在做这个文件，群昵称: 躺希腊额阿毛 QQ:786997741
-// TODO 条件 body_statu.status > 0
 'use strict';
 const db = uniCloud.database()
 exports.main = async (event, context) => {
