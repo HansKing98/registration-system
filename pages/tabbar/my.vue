@@ -32,7 +32,7 @@
 			this.ewm=QR.createQrCodeImg(ewmurl, {
 										size: 350
 									});
-		}
+		},
 		onShow() {
 			//TODO 此处需要根据登录设置适当调整
 			let that = this ;
