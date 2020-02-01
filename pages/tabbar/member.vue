@@ -85,6 +85,7 @@
 					result
 				}) => {
 					uni.hideLoading()
+					uni.stopPullDownRefresh()
 					console.log(result)
 					if (result.code !== 0) {
 						uni.showToast({
@@ -97,6 +98,7 @@
 					this.members.push(...result.data)
 				}).catch(err => {
 					uni.hideLoading()
+					uni.stopPullDownRefresh()
 					uni.showToast({
 						icon: 'none',
 						title: '数据加载失败'
