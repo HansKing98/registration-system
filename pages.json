@@ -51,10 +51,15 @@
 				"text": "列表"
 			},
 			{
+				"pagePath": "pages/chart/chart",
+				"iconPath": "static/tab_list.png",
+				"selectedIconPath": "static/tab_list_hl.png",
+				"text": "图表"
+			},
+			{
 				"pagePath": "pages/tabbar/add",
 				"iconPath": "static/tab_add.png",
-				"selectedIconPath": "static/tab_add_hl.png",
-				"text": "新增"
+				"selectedIconPath": "static/tab_add_hl.png"
 			}, {
 				"pagePath": "pages/tabbar/search",
 				"iconPath": "static/tab_search.png",
