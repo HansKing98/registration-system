@@ -67,5 +67,8 @@
 				"text": "我的"
 			}
 		]
+	},
+	"easycom": {
+	  "z-table": "@/components/z-table/z-table"
 	}
 }
