@@ -316,7 +316,7 @@
                     title: "处理中..."
                 });
 
-                uniCloud.callFunction({
+                this.$cloud.callFunction({
                     name: 'add-member', // 云函数名
                     data: {}, // 表单数据
                     success: (res) => {

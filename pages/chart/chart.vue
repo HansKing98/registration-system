@@ -52,7 +52,7 @@
 				uni.showLoading({
 					title: "加载中..."
 				});
-				uniCloud.callFunction({
+				this.$cloud.callFunction({
 					name: 'chart-member-list',
 					data: {},
 					success: (res) => {

@@ -87,7 +87,7 @@
 					title: "加载中..."
 				});
 
-				uniCloud.callFunction({
+				this.$cloud.callFunction({
 					name: 'member-detail',
 					data: {},
 					success: (res) => {
