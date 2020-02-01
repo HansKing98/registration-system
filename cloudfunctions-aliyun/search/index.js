@@ -9,9 +9,20 @@ exports.main = async (event, context) => {
 			name: new RegExp(event.searchKey)
 		}, {
 			address: new RegExp(event.searchKey)
+		}, {
+			phone: new RegExp(event.searchKey)
 		})).orderBy("regtime", "desc").skip((event.page - 1) * event.pageSize).limit(event.pageSize).get();
 		return res
-	} else {
+	} if (event.startDate != '') {
+		const dbCmd = db.command;
+		const res = await db.collection('member').aggregate().lookup({
+		from: 'member_list',
+		localField: 'id_card',
+		foreignField: 'id_card',
+		as: 'memberList',
+	  }).get();
+		return res
+	}else {
 		const res = await collection.orderBy("regtime", "desc").skip((event.page - 1) * event.pageSize).limit(event.pageSize)
 			.get();
 		return res
