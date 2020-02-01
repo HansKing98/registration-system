@@ -12,7 +12,7 @@
 					<text style="padding: 0 10px;">至</text>
 					<input type="text" disabled="true"  v-model="endDate" placeholder="结束日期" style="border-bottom: 1px solid #d1d1d1;padding-left: 10upx;" @tap="openCalendar" />
 				</view>
-				<text class="uni-icon uni-icon-search" style="color: #999999;font-size: 24px;"></text>
+				<text class="uni-icon uni-icon-search" style="color: #999999;font-size: 24px;" @tap="search"></text>
 			</view>
 		
 		</view>
