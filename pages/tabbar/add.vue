@@ -4,7 +4,7 @@
 		<view class="list">
 			<view class="list-title">人员信息</view>
 			<view class="list-item">
-				<text>姓名：</text><input v-model="name" value="" placeholder="请输入人员姓名" /></view>
+				<text>姓名<text class="color-red">*</text>：</text><input v-model="name" value="" placeholder="请输入人员姓名" /></view>
 			<view class="list-item">
 				<text>证件类型：</text>
 				<picker mode="selector" range-key="label" :range="idTypeList" @change="idTypeChange">
@@ -32,7 +32,7 @@
 				</radio-group>
 			</view>
 			<view class="list-item">
-				<text>联系电话： </text>
+				<text>联系电话<text class="color-red">*</text>： </text>
 				<input v-model="phone" value="" placeholder="请输入联系电话" />
 			</view>
 		</view>
@@ -564,5 +564,9 @@
 		margin: 5px auto;
 		height: 1px;
 		background-color: #DDDDDD;
+	}
+	
+	.color-red {
+		color: #FF3333;
 	}
 </style>
