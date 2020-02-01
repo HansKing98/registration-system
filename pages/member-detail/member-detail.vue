@@ -14,7 +14,7 @@
 			<view class="xq-title" style="position: relative;">人员信息</view>
 			<view class="xq-list">
 				<view class="items">姓名：{{ryinfo['name']}}</view>
-				<view class="items">性别：{{ryinfo['sex']}}</view>
+				<view class="items">性别：{{ryinfo.sex|sex}}</view>
 				<view class="items">年龄：{{ryinfo['age']}}岁</view>
 				<view class="items">证件类型：{{ryinfo.id_type|idType}}</view>
 				<view class="items">证件号码：{{ryinfo.id_card}}</view>
@@ -99,6 +99,9 @@
 				}
 				const date = new Date(val)
 				return `${date.getFullYear()}年${date.getMonth()+1}月${date.getDate()}日 ${date.getHours()}时${date.getMinutes()}分${date.getSeconds()}秒`
+			},
+			sex(val) {
+				return val ? (['女', '男'])[val] || '未知' : '未知'
 			}
 		},
 		onLoad({
