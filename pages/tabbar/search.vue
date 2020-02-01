@@ -17,7 +17,7 @@
 		
 		</view>
 		<uni-list>
-			<uni-list-item v-for="(item,index) in list" :key="index" @click="openDetail(item._id)" :title="item.name" :note="item.address"></uni-list-item>
+			<uni-list-item v-for="(item,index) in list" :key="index" @click="openDetail(item)" :title="item.name" :note="item.address"></uni-list-item>
 		</uni-list>
 		<view class="uni-flex" style="justify-content: center;padding: 10upx;">
 			{{contentText[loadingType]}}
@@ -115,9 +115,9 @@
 				})
 
 			},
-			openDetail: function(id) {
+			openDetail: function(item) {
 				uni.navigateTo({
-					url: '../member-detail/member-detail?id=' + id
+					url: `../member-detail/member-detail?item=${encodeURIComponent(JSON.stringify(item))}`
 				})
 			},
 			reload: function() {
