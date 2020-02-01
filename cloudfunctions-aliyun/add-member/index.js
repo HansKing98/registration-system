@@ -6,6 +6,7 @@ const defaultMemberInfo = {
 	name: '',
 	phone: '',
 	age: '',
+	province: '',
 	city: '',
 	area: '',
 	address: '',
@@ -115,6 +116,7 @@ exports.main = async (event = {}, context) => {
 		}
 	})
 	if (event.from_address) {
+		memberInfo.province = event.from_address.province
 		memberInfo.city = event.from_address.city
 		memberInfo.area = event.from_address.district
 		memberInfo.address = event.from_address.street
