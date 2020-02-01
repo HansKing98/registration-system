@@ -93,7 +93,7 @@
 						page: this.page,
 						startDate:this.startDate,
 						endDate:this.endDate,
-						searchKey: this.searchKey.value,
+						searchKey: this.searchKey,
 						pageSize: 10
 					}
 				}).then((res) => {
