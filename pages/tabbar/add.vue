@@ -1,377 +1,431 @@
 <template>
 	<!--丛林野战军上传于2020年1月29日21：58，QQ:31853722-->
 	<view class="content">
-		<form @submit="sendsj">
-			<view class="list">
-				<view class="list-title">人员信息</view>
-				<view class="list-item">姓名： <input name="name" value="" placeholder="请输入人员姓名" /></view>
-				<view class="list-item">证件类型：<picker mode="selector" style="padding:0px;margin:0px;" range-key="lable" :range="zj"
-					 @change="zjChange">
-						<view class="xiala">{{zjlx}}
-							<image src="/static/xl.png"></image>
-						</view>
-					</picker>
-				</view>
-				<view class="list-item">证件号码：<input name="zjhm" placeholder="请输入证件号码" type="number" @blur="checkzj" /></view>
-				<view class="list-item">年龄：<picker mode="selector" style="padding:0px;margin:0px;" range-key="lable" :range="nl"
-					 @change="nlChange">
-						<view class="xiala">{{xznl}}
-							<image src="/static/xl.png"></image>
-						</view>
-					</picker>
-				</view>
-				<view class="list-item">性别：<picker mode="selector" style="padding:0px;margin:0px;" range-key="lable" :range="xb"
-					 @change="xbChange">
-						<view class="xiala">{{xzxb}}
-							<image src="/static/xl.png"></image>
-						</view>
-					</picker>
-				</view>
-				<view class="list-item">联系电话：<input name="phoneNumber" value="" placeholder="请输入联系电话" /></view>
+		<view class="list">
+			<view class="list-title">人员信息</view>
+			<view class="list-item">
+				<text>姓名：</text><input v-model="name" value="" placeholder="请输入人员姓名" /></view>
+			<view class="list-item">
+				<text>证件类型：</text>
+				<picker mode="selector" range-key="label" :range="idTypeList" @change="idTypeChange">
+					<view class="xiala">
+						<text>{{idTypeList[id_type].label}}</text>
+						<image src="/static/xl.png"></image>
+					</view>
+				</picker>
 			</view>
-			<view class="list">
-				<view class="list-title">来源地信息</view>
-				<view class="list-item">是否来自武汉：<button v-if="lzwh==''" type="primary" size="mini" @click="jcly(1)">是</button><button
-					 v-if="lzwh==''" type="warn" size="mini" style="margin-left:30upx;" @click="jcly(2)">否</button><button size="mini"
-					 v-if="lzwh!=''" @click="cxly(1)">{{lzwh}}</button></view>
-				<view class="list-item">是否来自湖北：<button type="primary" v-if="lzhb==''" size="mini" @click="jcly(3)">是</button><button
-					 type="warn" v-if="lzhb==''" size="mini" style="margin-left:30upx;" @click="jcly(4)">否</button><button size="mini"
-					 v-if="lzhb!=''" @click="cxly(2)">{{lzhb}}</button></view>
-				<view class="list-item">来源地详细地址：<input name="lydaddr" placeholder="请输入地址" /></view>
-				<view class="list-item">出行时间： <picker @change="cxdate" mode="date">
-						<button size="mini">{{cxrq}}</button>
-					</picker>
-				</view>
-				<view class="list-item">出行方式：<picker mode="selector" style="padding:0px;margin:0px;" range-key="lable" :range="cx"
-					 @change="cxfsChange">
-						<view class="xiala">{{cxfs}}
-							<image src="/static/xl.png"></image>
-						</view>
-					</picker>
-				</view>
-				<view v-if="cxlx!=''" class="list-item">{{cxlx}}：<input name="cxfshm" placeholder="请务必输入正确的信息" /></view>
-				<view class="list-item">到访地址：<input name="xjd" placeholder="请输入详细地址" /></view>
-				<view class="list-item">联系人电话：<input name="lxr" type="number" placeholder="请输入联系人电话" /></view>
+			<view class="list-item">
+				<text>证件号码：</text>
+				<input v-model="id_card" placeholder="请输入证件号码" type="number" />
 			</view>
-			<view class="list">
-				<view class="list-title">健康状况</view>
-				<view class="list-item">是否确诊人员：<button v-if="sfqz==''" type="primary" size="mini" @click="jcry(5)">是</button><button
-					 type="warn" v-if="sfqz==''" size="mini" style="margin-left:30upx;" @click="jcry(6)">否</button><button v-if="sfqz!=''"
-					 @click="cxjc(3)" size="mini">{{sfqz}}</button></view>
-				<view class="list-item"  v-if="sfqz!='是'">是否疑似人员：<button v-if="sfys==''" type="primary" size="mini" @click="jcry(7)">是</button><button
-					 	 type="warn" v-if="sfys==''" size="mini" style="margin-left:30upx;" @click="jcry(8)">否</button><button v-if="sfys!=''"
-					 	 @click="cxjc(4)" size="mini">{{sfys}}</button></view>
-				<view class="list-item">体温：
-					<slider value="37" @change="twChange" min="36.5" step="0.1" max="40" show-value style="width: 400upx;" />
-				</view>
-				<view class="list-item">检测时间： <picker @change="jcdate" mode="date">
-						<button size="mini">{{jcrq}}</button>
-					</picker>
-					<picker @change="jctime" mode="time">
-						<button size="mini" style="margin-left:20upx;margin-right:20upx">{{jcsj}}</button>
-					</picker>
-				</view>
-				<view class="list-item">其它症状： <checkbox-group @change="qtzz" style="display: flex;flex-direction: row;flex-wrap:wrap">
-						<label class="uni-list-cell uni-list-cell-pd" style="display: flex;flex-direction: row;margin-top:20upx;" v-for="item in items"
-						 :key="item.value">
-							<view style="margin-left:20upx;height:50upx;line-height: 50upx;">
-								<checkbox :value="item.value" :checked="item.checked" />
-							</view>
-							<view style="display: flex;height:50upx;line-height: 50upx;">{{item.name}}</view>
-						</label>
-					</checkbox-group>
-				</view>
-				<view class="list-item" v-if="sfqz!='是'&&sfys!='是'">是否接触确诊人员：<button v-if="jcqz==''" type="primary" size="mini" @click="jcry(1)">是</button><button
-					 type="warn" v-if="jcqz==''" size="mini" style="margin-left:30upx;" @click="jcry(2)">否</button><button v-if="jcqz!=''"
-					 @click="cxjc(1)" size="mini">{{jcqz}}</button></view>
-				<view v-if="jcqz=='是'">
-					<view class="list-item">接触人员姓名： <input name="jcname" placeholder="请输入人员姓名" /></view>
-					<view class="list-item">接触人员电话：<input name="jcphone" placeholder="请输入联系电话" /></view>
-				</view>
-				<view class="list-item" v-if="sfqz!='是'&&sfys!='是'">是否接触疑似人员：<button v-if="jcys==''" type="primary" size="mini" @click="jcry(3)">是</button><button
-					 type="warn" v-if="jcys==''" size="mini" style="margin-left:30upx;" @click="jcry(4)">否</button><button v-if="jcys!=''"
-					 @click="cxjc(2)" size="mini">{{jcys}}</button></view>
-				<view v-if="jcys=='是'"> 
-					<view class="list-item">接触人员姓名： <input name="ysname" placeholder="请输入人员姓名" /></view>
-					<view class="list-item">接触人员电话：<input name="ysphone" placeholder="请输入联系电话" /></view>
-				</view>
-				<button style="width: 100%;" form-type="submit">提交信息</button>
-
+			<view class="list-item">
+				<text>年龄：</text>
+				<slider value="20" min="0" step="1" max="120" show-value @change="ageChange" />
 			</view>
-		</form>
+			<view class="list-item">
+				<text>性别： </text>
+				<radio-group @change="sexChange">
+					<label>
+						<radio value="1" /><text>男</text>
+						<radio value="0" /><text>女</text>
+					</label>
+				</radio-group>
+			</view>
+			<view class="list-item">
+				<text>联系电话： </text>
+				<input v-model="phone" value="" placeholder="请输入联系电话" />
+			</view>
+		</view>
+		<view class="list">
+			<view class="list-title">来源地信息</view>
+			<view class="list-item">
+				<text>是否来自湖北： </text>
+				<radio-group @change="fromHbChange">
+					<label>
+						<radio value="1" /><text>是</text>
+						<radio value="0" /><text>否</text>
+					</label>
+				</radio-group>
+			</view>
+			<view class="list-item">
+				<text>是否来自武汉： </text>
+				<radio-group @change="fromWhChange">
+					<label>
+						<radio value="1" /><text>是</text>
+						<radio value="0" /><text>否</text>
+					</label>
+				</radio-group>
+			</view>
+			<view class="list-item">
+				<text>来源地区：</text>
+				<input @click="showCityPicker('from_address')" disabled="disabled" placeholder="请输入地址" :value="from_address.addressStr" />
+			</view>
+			<view class="list-item">
+				<text>来源地详细地址： </text>
+				<input v-model="from_address.street" placeholder="请输入地址" />
+			</view>
+			<view class="list-item">
+				<text>出行方式：</text>
+				<radio-group @change="trafficTypeChange">
+					<label>
+						<radio value="0" /><text>火车</text>
+					</label>
+					<label>
+						<radio value="1" /><text>自驾</text>
+					</label>
+					<label>
+						<radio value="2" /><text>汽车</text>
+					</label>
+					<label>
+						<radio value="3" /><text>飞机</text>
+					</label>
+				</radio-group>
+			</view>
+			<view class="list-item" v-if="traffic.type>-1">
+				<text>交通工具信息： </text>
+				<input v-model="traffic.car_plate" placeholder="请务必输入正确的信息" />
+			</view>
+			<view class="list-item">
+				<text>到访地区：</text>
+				<input @click="showCityPicker('check_in_address')" disabled="disabled" placeholder="请输入地址" :value="check_in_address.addressStr" />
+			</view>
+			<view class="list-item">
+				<text>到访地详细地址： </text>
+				<input v-model="check_in_address.street" placeholder="请输入地址" />
+			</view>
+			<view class="list-item">
+				<text>到达日期： </text>
+				<picker mode="date" @change="checkInTimeChange">
+					<button size="mini">{{checkInTimeStr||'请选择'}}</button>
+				</picker>
+			</view>
+		</view>
+		<view class="list">
+			<view class="list-title">健康状况</view>
+			<view class="list-item">
+				<text>身体状况：</text>
+				<radio-group @change="bodyStatusChange">
+					<label>
+						<radio value="0" /><text>普通</text>
+					</label>
+					<label>
+						<radio value="1" /><text>居家隔离</text>
+					</label>
+					<label>
+						<radio value="2" /><text>发烧</text>
+					</label>
+					<label>
+						<radio value="3" /><text>疑似</text>
+					</label>
+					<label>
+						<radio value="4" /><text>确诊</text>
+					</label>
+					<label>
+						<radio value="5" /><text>死亡</text>
+					</label>
+				</radio-group>
+			</view>
+			<view class="list-item">
+				<text>记录时间：</text>
+				<picker mode="date" @change="bodyStatusDateChange">
+					<button size="mini">{{bodyStatusDate||'请选择日期'}}</button>
+				</picker>
+				<picker mode="time" @change="bodyStatusTimeChange">
+					<button size="mini">{{bodyStatusTime||'请选择时间'}}</button>
+				</picker>
+			</view>
+			<view class="divider"></view>
+			<view class="list-item">
+				<text>体温：</text>
+				<slider value="36.5" @change="temperatureChange" min="35" step="0.1" max="40" show-value />
+			</view>
+			<view class="divider"></view>
+			<view class="list-item">
+				<text>是否接触过确诊人员：</text>
+				<radio-group @change="contactVirusChange">
+					<label>
+						<radio value="1" /><text>是</text>
+						<radio value="0" /><text>否</text>
+					</label>
+				</radio-group>
+			</view>
+			<view v-if="contact_virus.status == 1">
+				<view class="list-item">
+					<text>接触人员姓名：</text>
+					<input v-model="contact_virus.name" placeholder="请输入人员姓名" />
+				</view>
+				<view class="list-item">
+					<text>接触人员电话：</text>
+					<input v-model="contact_virus.contact" placeholder="请输入联系电话" />
+				</view>
+			</view>
+			<view class="divider"></view>
+			<view class="list-item">
+				<text>是否接触过疑似人员：</text>
+				<radio-group @change="contactLikeChange">
+					<label>
+						<radio value="1" /><text>是</text>
+						<radio value="0" /><text>否</text>
+					</label>
+				</radio-group>
+			</view>
+			<view v-if="contact_like_virus.status == 1">
+				<view class="list-item">
+					<text>接触人员姓名：</text>
+					<input v-model="contact_like_virus.name" placeholder="请输入人员姓名" />
+				</view>
+				<view class="list-item">
+					<text>接触人员电话：</text>
+					<input v-model="contact_like_virus.contact" placeholder="请输入联系电话" />
+				</view>
+			</view>
+			<view class="divider"></view>
+			<view class="list-item">
+				<text>是否接触过疫区人员：</text>
+				<radio-group @change="contactVirusRegionChange">
+					<label>
+						<radio value="1" /><text>是</text>
+						<radio value="0" /><text>否</text>
+					</label>
+				</radio-group>
+			</view>
+			<view v-if="contact_like_virus_region.status == 1">
+				<view class="list-item">
+					<text>接触人员姓名：</text>
+					<input v-model="contact_like_virus_region.name" placeholder="请输入人员姓名" />
+				</view>
+				<view class="list-item">
+					<text>接触人员电话：</text>
+					<input v-model="contact_like_virus_region.contact" placeholder="请输入联系电话" />
+				</view>
+			</view>
+			<view class="divider"></view>
+			<view class="list-item">
+				<text>额外信息：</text>
+				<textarea v-model="comment" placeholder="请输入额外信息"></textarea>
+			</view>
+			<button @click="submit">提交信息</button>
+		</view>
+		<mpvue-city-picker ref="mpvueCityPicker" :pickerValueDefault="cityPickerValueDefault" @onConfirm="onCityConfirm"></mpvue-city-picker>
 	</view>
 </template>
 
 <script>
+	import mpvueCityPicker from '@/components/mpvue-citypicker/mpvueCityPicker.vue'
 	export default {
+		components: {
+			mpvueCityPicker
+		},
 		data() {
 			return {
-				title: '海陵区城东街道外来人员信息登录管理系统',
-				zj: [{
-					lable: '身份证',
-					value: '身份证'
+				cityPickerValueDefault: [0, 0, 1],
+				name: '',
+				idTypeList: [{
+					label: '身份证',
+					value: 0
 				}, {
-					lable: '驾驶证',
-					value: '驾驶证'
-				}, {
-					lable: '护照',
-					value: '护照'
-				}, {
-					lable: '士官证',
-					value: '士官证'
+					label: '护照',
+					value: 1
 				}],
-				zjlx: '请选择证件类型',
-				xznl: '输入年龄',
-				xzxb: '选择性别',
-				nl: [], //年龄
-				xb: [{
-					lable: '男',
-					value: '男'
-				}, {
-					lable: '女',
-					value: '女'
-				}],
-				cxfs: '出行方式',
-				cx: [{
-					lable: '汽车',
-					value: '汽车'
-				}, {
-					lable: '火车',
-					value: '火车'
-				}, {
-					lable: '飞机',
-					value: '飞机'
-				}, {
-					lable: '其它',
-					value: '其它'
-				}],
-				cxlx: '',
-				jcsj: '选择时间',
-				jcrq: '选择日期',
-				cxrq:'选择日期',
-				lzwh: '',
-				lzhb: '',
-				sfqz:'',//是否确诊
-				sfys:'',//是否疑似
-				jcqz: '',
-				jcys: '',
-				tw: 0, //体温
-				otherzz: '', //其它症状
-				items: [{
-						value: '咳嗽',
-						name: '咳嗽'
-					},
-					{
-						value: '头痛',
-						name: '头痛',
-					},
-					{
-						value: '乏力',
-						name: '乏力',
-					},
-					{
-						value: '呕吐',
-						name: '呕吐',
-					},
-					{
-						value: '腹泄',
-						name: '腹泄',
-					},
-					{
-						value: '昏迷',
-						name: '昏迷',
-					}
-
-				],
-				senddata: {} //存放最终的表单数据
+				id_type: 0,
+				id_card: '',
+				age: 20,
+				sex: 2,
+				phone: '',
+				from_hb: 0,
+				from_wh: 0,
+				from_address: {
+					addressStr: '',
+					street: ''
+				},
+				traffic: {
+					type: -1
+				},
+				check_in_address: {
+					addressStr: '',
+					street: ''
+				},
+				checkInTimeStr: '',
+				body_status: {
+					status: 0,
+					time: Date.now()
+				},
+				bodyStatusDate: '',
+				bodyStatusTime: '',
+				temperature: 36.5,
+				contact_virus: {
+					status: '',
+					name: '',
+					contact: ''
+				},
+				contact_like_virus: {
+					status: '',
+					name: '',
+					contact: ''
+				},
+				contact_like_virus_region: {
+					status: '',
+					name: '',
+					contact: ''
+				},
+				comment: ''
+			}
+		},
+		computed: {
+			check_in_time: function() {
+				return new Date(this.checkInTimeStr).getTime()
+			}
+		},
+		watch: {
+			bodyStatusDate() {
+				this.getBodyStatusTimeStamp()
+			},
+			bodyStatusTime() {
+				this.getBodyStatusTimeStamp()
 			}
 		},
 		onLoad() {
-			for (let i = 0; i < 100; i++) {
-				this.nl.push({
-					lable: i,
-					value: i
-				})
-			}
+
 		},
 		methods: {
-			zjChange: function(e) {
-				this.zjlx = this.zj[e.detail.value].value
+			idTypeChange(e) {
+				this.id_type = e.detail.value
 			},
-			nlChange: function(e) {
-				this.xznl = this.nl[e.detail.value].value
+			ageChange(e) {
+				this.age = e.detail.value
 			},
-			xbChange: function(e) {
-				this.xzxb = this.xb[e.detail.value].value
+			sexChange(e) {
+				this.sex = e.detail.value
 			},
-			twChange: function(e) {
-				this.tw = e.detail.value;
+			fromHbChange(e) {
+				this.sex = e.detail.value
 			},
-			cxfsChange: function(e) {
-				this.cxfs = this.cx[e.detail.value].value
-				if (this.cxfs == '汽车') {
-					this.cxlx = "车牌号";
-				}
-				if (this.cxfs == '火车') {
-					this.cxlx = "火车班次";
-				}
-				if (this.cxfs == '飞机') {
-					this.cxlx = "航班号";
-				}
-				if (this.cxfs == '其它') {
-					this.cxlx = "出行方式说明";
-				}
+			fromWhChange(e) {
+				this.sex = e.detail.value
 			},
-			qtzz: function(e) {
-				console.log(e.detail.value);
-				this.otherzz = e.detail.value;
+			trafficTypeChange(e) {
+				this.traffic.type = e.detail.value
 			},
-			jcdate: function(e) {
-				console.log(e.detail.value);
-				this.jcrq = e.detail.value;
+			showCityPicker(segment) {
+				this.tempPickerSegment = segment
+				this.$refs.mpvueCityPicker.show();
 			},
-			cxdate: function(e) {
-				console.log(e.detail.value);
-				this.cxrq = e.detail.value;
+			onCityConfirm(e) {
+				let addressParam = this[this.tempPickerSegment]
+				addressParam.province = e.value[0]
+				addressParam.city = e.value[1]
+				addressParam.district = e.value[2]
+				addressParam.addressStr = e.label
 			},
-			jctime: function(e) {
-				console.log(e.detail.value);
-				this.jcsj = e.detail.value;
+			checkInTimeChange(e) {
+				this.checkInTimeStr = e.detail.value
 			},
-			cxjc: function(e) {
-				if (e == 1) {
-					this.jcqz = '';
-				}
-				if (e == 2) {
-					this.jcys = '';
-				}
-				if (e == 3) {
-					this.sfqz = '';
-				}
-				if (e == 4) {
-					this.sfys = '';
+			bodyStatusChange(e) {
+				this.body_status.status = e.detail.value
+			},
+			bodyStatusDateChange(e) {
+				this.bodyStatusDate = e.detail.value
+			},
+			bodyStatusTimeChange(e) {
+				this.bodyStatusTime = e.detail.value
+			},
+			getBodyStatusTimeStamp() {
+				if (this.bodyStatusDate && this.bodyStatusTime) {
+					this.body_status.time = new Date(this.bodyStatusDate + ' ' + this.bodyStatusTime).getTime()
+				} else {
+					this.body_status.time = 0
 				}
 			},
-			jcry: function(e) {
-				if (e == 1) {
-					this.jcqz = "是";
-				}
-				if (e == 2) {
-					this.jcqz = "否";
-				}
-				if (e == 3) {
-					this.jcys = "是";
-				}
-				if (e == 4) {
-					this.jcys = "否";
-				}
-				if (e == 5) {
-					this.sfqz = "是";
-				}
-				if (e == 6) {
-					this.sfqz = "否";
-				}
-				if (e == 7) {
-					this.sfys = "是";
-				}
-				if (e == 8) {
-					this.sfys = "否";
-				}
-				
+			temperatureChange(e) {
+				this.temperature = e.detail.value
 			},
-			jcly: function(e) {
-				if (e == 1) {
-					this.lzwh = "是";
-				}
-				if (e == 2) {
-					this.lzwh = "否";
-				}
-				if (e == 3) {
-					this.lzhb = "是";
-				}
-				if (e == 4) {
-					this.lzhb = "否";
-				}
+			contactVirusChange(e) {
+				this.contact_virus.status = e.detail.value
 			},
-			cxly: function(e) {
-				if (e == 1) {
-					this.lzwh = "";
-				}
-				if (e == 2) {
-					this.lzhb = "";
-				}
+			contactLikeChange(e) {
+				this.contact_like_virus.status = e.detail.value
 			},
-			sendsj: function({
-				detail
-			}) {
-				const info = Object.assign({}, detail.value, {
-
-				})
-				console.log(info)
-				if (!info.name || !info.phoneNumber) {
-					uni.showToast({
-						title: '姓名和电话不能为空',
-						icon: 'none'
+			contactVirusRegionChange(e) {
+				this.contact_like_virus_region.status = e.detail.value
+			},
+			submit() {
+				if (!this.name) {
+					uni.showModal({
+						content: '请填写人员姓名',
+						showCancel: false
 					})
-					return
+					return false
 				}
-				this.addUser(info)
-			},
-			addUser(data) {
-				uni.showLoading({
-					title: "处理中..."
-				});
+				if (!this.phone) {
+					uni.showModal({
+						content: '请填写人员手机号',
+						showCancel: false
+					})
+					return false
+				}
 
+				const {
+					id_type,
+					id_card,
+					name,
+					phone,
+					age,
+					sex,
+					from_address,
+					from_hb,
+					from_wh,
+					traffic,
+					temperature,
+					check_in_address,
+					check_in_time,
+					body_status,
+					contact_virus,
+					contact_like_virus,
+					contact_like_virus_region,
+					comment
+				} = this
+				uni.showLoading({
+					title:'上传中...'
+				})
 				this.$cloud.callFunction({
-					name: 'add-member', // 云函数名
-					data, // 表单数据
-				}).then(({
-					result
-				}) => {
+					name: 'add-member',
+					data: {
+						id_type,
+						id_card,
+						name,
+						phone,
+						age,
+						sex,
+						from_address,
+						from_hb,
+						from_wh,
+						traffic,
+						temperature,
+						check_in_address,
+						check_in_time,
+						body_status,
+						contact_virus,
+						contact_like_virus,
+						contact_like_virus_region,
+						comment
+					}
+				}).then((res) => {
 					uni.hideLoading()
-					if (result.code === 0) {
-						uni.showToast({
-							title: '提交成功'
+					if (res.result.code === 0) {
+						uni.showModal({
+							content: '信息上传完成',
+							showCancel: false
 						})
 					} else {
-						uni.showToast({
-							icon: 'none',
-							title: result.msg
-						})
+						return Promise.reject(new Error(res.result.msg))
 					}
-				}).catch(err => {
+				}).catch((err) => {
 					uni.hideLoading()
-					uni.showToast({
-						icon: 'none',
-						title: '提交失败'
+					uni.showModal({
+						content: err.message || '记录添加失败',
+						showCancel: false
 					})
 				})
-			},
-			checkzj:function(e){
-				if(this.zjlx=="身份证"||this.zjlx=="驾驶证")
-				{
-					if(e.detail.value.length==18){
-						let nian=parseInt(e.detail.value.substr(6,4));
-						let ckxb=parseInt(e.detail.value.substr(16,1));
-						if(!isNaN(nian)){
-							this.xznl=2020-nian;
-						}
-						
-						if(!isNaN(ckxb)){
-							if(ckxb==1){
-								this.xzxb="男";
-							}
-							if(ckxb==0){
-								this.xzxb="女";
-							}
-						}
-						
-					}
-					else{
-						console.log("no");
-					}
-				}
-				console.log(e.detail.value);
 			}
 		}
 	}
@@ -387,69 +441,107 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		margin-bottom: 50upx;
+		margin-bottom: 50rpx;
 	}
 
 	.list {
 		display: flex;
 		flex-direction: column;
-		width: 680upx;
+		width: 680rpx;
 		margin: auto;
-		margin-top: 20upx;
+		margin-top: 20rpx;
 		background: #ffffff;
-		border-radius: 20upx;
-		padding-bottom: 20upx;
+		border-radius: 20rpx;
+		padding-bottom: 20rpx;
 	}
 
 	.list-title {
-		width: 580upx;
-		padding: 20upx;
+		width: 580rpx;
+		padding: 20rpx;
 		display: flex;
-		font-size: 40upx;
+		font-size: 40rpx;
 		font-weight: bold;
-		border-bottom: #f0f0f0 1upx solid;
+		border-bottom: #f0f0f0 1rpx solid;
 		margin: auto;
-		margin-bottom: 20upx;
+		margin-bottom: 20rpx;
 
 	}
 
 	.list-item {
-		width: 580upx;
-		padding: 20upx;
+		width: 580rpx;
+		padding: 20rpx;
 		display: flex;
 		margin: auto;
-		font-size: 30upx;
+		font-size: 30rpx;
 		align-items: center;
+	}
+
+	.list-item>text {
+		white-space: nowrap;
 	}
 
 	.list-item input {
 		background: #f0f0f0;
-		border-radius: 10upx;
-		padding-left: 20upx;
-		padding-right: 20upx;
-		width: 300upx;
-		height: 60upx;
+		border-radius: 10rpx;
+		padding-left: 20rpx;
+		padding-right: 20rpx;
+		width: 300rpx;
+		height: 60rpx;
 		color: #999999;
-		font-size: 30upx;
+		font-size: 30rpx;
+	}
 
+	.list-item slider {
+		width: 300rpx;
+	}
+
+	.list-item picker {
+		margin-right: 10px;
+	}
+
+	.list-item picker button {
+		vertical-align: middle;
+	}
+
+	.list-item label {
+		display: inline-block;
+		margin: 5px 0px;
+	}
+
+	.list-item label text {
+		margin-right: 10px;
+	}
+
+	.list-item textarea {
+		border-radius: 5px;
+		background-color: #F8F8F8;
+		padding: 10px;
 	}
 
 	.xiala {
 		display: flex;
 		background: #f0f0f0;
-		padding: 10upx;
-		border-radius: 10upx;
+		padding: 10rpx;
+		border-radius: 10rpx;
 		color: #999999;
-		font-size: 30upx;
+		font-size: 30rpx;
 
 	}
 
 	.xiala image {
 		display: flex;
-		padding-top: 5upx;
-		width: 30upx;
-		height: 30upx;
-		margin-left: 10upx;
+		padding-top: 5rpx;
+		width: 30rpx;
+		height: 30rpx;
+		margin-left: 10rpx;
 
+	}
+
+	.divider {
+		content: '';
+		width: 580rpx;
+		margin: 5px auto;
+		height: 1px;
+		background-color: #DDDDDD;
 	}
 </style>

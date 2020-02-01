@@ -1,15 +1,22 @@
-//我在做这个文件，我的群昵称是AHello <!--丛林野战军2020.2.1修改，增加二维码-->
+<!-- //我在做这个文件，我的群昵称是AHello -->
+<!--丛林野战军2020.2.1修改，增加二维码-->
+<!-- heavensoft，修改二维码的地址 -->
 <template>
-	<view>		
-		<uni-list>			
-		    <uni-list-item :title="this.username" :note="this.phone" show-arrow="false" thumb="/static/font/user.png"></uni-list-item>
-		    <uni-list-item title="修改密码" thumb="/static/font/pwd.png" @click="modifyPwd()"></uni-list-item>
+	<view>
+		<uni-list>
+			<uni-list-item :title="this.username" :note="this.phone" show-arrow="false" thumb="/static/font/user.png"></uni-list-item>
+			<uni-list-item title="修改密码" thumb="/static/font/pwd.png" @click="modifyPwd()"></uni-list-item>
 			<uni-list-item title="关于" thumb="/static/font/about.png" @click="aboutUs()"></uni-list-item>
 			<uni-list-item title="切换账号/退出" thumb="/static/font/exit.png" @click="exit()"></uni-list-item>
 		</uni-list>
-		<view class="list"><x style="">扫码直接填写信息</x><x style=""><image :src="ewm" style="width:300upx;height:300upx;margin:auto;"></image></x></view>
+		<view class="list">
+			<x style="">扫码直接填写信息</x>
+			<x style="">
+				<image :src="ewm" style="width:300upx;height:300upx;margin:auto;"></image>
+			</x>
+		</view>
 	</view>
-	
+
 </template>
 
 <script>
@@ -17,53 +24,57 @@
 	import uniListItem from "@/components/uni-list-item/uni-list-item.vue"
 	import uniIcon from "@/components/uni-icons/uni-icons.vue"
 	import QR from '../../common/qrcode.js';
-	export default {	
-		components: {uniList,uniListItem,uniIcon},
+	export default {
+		components: {
+			uniList,
+			uniListItem,
+			uniIcon
+		},
 		data() {
-			return {				
-				username:'张三',
-				phone:"15022103112",
-				ewm:''  //二维码
+			return {
+				username: '张三',
+				phone: "15022103112",
+				ewm: '' //二维码
 			}
 		},
 		onLoad() {
-			let userid="user"
-			let ewmurl="http://www.anjnet.com/xinguan/#/pages/index/add?id="+userid;
-			this.ewm=QR.createQrCodeImg(ewmurl, {
-										size: 350
-									});
+			let userid = "user"
+			let ewmurl = "http://sfwy-wlry.m3w.cn/#/pages/index/add?id=" + userid;
+			this.ewm = QR.createQrCodeImg(ewmurl, {
+				size: 350
+			});
 		},
 		onShow() {
 			//TODO 此处需要根据登录设置适当调整
-			let that = this ;
+			let that = this;
 			uni.getStorage({
 				key: 'username',
-				success: function(res) {						 
+				success: function(res) {
 					that.username = res.data;
 				}
 			});
 			uni.getStorage({
 				key: 'phone',
-				success: function(res) {						 
+				success: function(res) {
 					that.phone = res.data;
 				}
 			});
 		},
 		methods: {
 			//修改密码
-			modifyPwd() {				
+			modifyPwd() {
 				uni.navigateTo({
 					url: 'change-pwd'
 				})
 			},
 			//关于我们
-			aboutUs() {				
+			aboutUs() {
 				uni.navigateTo({
 					url: ''
 				})
 			},
 			//退出
-			exit() {			
+			exit() {
 				uni.navigateTo({
 					url: 'login'
 				})
@@ -73,19 +84,19 @@
 </script>
 
 <style>
-	.list{
-		height:350upx;
+	.list {
+		height: 350upx;
 		display: flex;
 		flex-direction: column;
-		margin:20upx;
-        background:#ffffff;
-       margin:auto;
-	   justify-content: center;
-	   padding:20upx;
-	   width:750upx;
-	   text-align: center;
-	   border-top:#efefef 1upx solid;
-	  padding-top:40upx;
-	  line-height: 80upx;
+		margin: 20upx;
+		background: #ffffff;
+		margin: auto;
+		justify-content: center;
+		padding: 20upx;
+		width: 750upx;
+		text-align: center;
+		border-top: #efefef 1upx solid;
+		padding-top: 40upx;
+		line-height: 80upx;
 	}
 </style>
