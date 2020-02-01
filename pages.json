@@ -13,7 +13,17 @@
 		},
 		{
 			"path": "pages/tabbar/search",
-			"style": {}
+			"style": {
+				"h5": {
+					"titleNView": {
+						"buttons": [{
+							"type": "none",
+							"text": "导出",
+							"float": "right"
+						}]
+					}
+				}
+			}
 		},
 		{
 			"path": "pages/tabbar/my",
@@ -53,8 +63,7 @@
 		"selectedColor": "#007AFF",
 		"borderStyle": "black",
 		"backgroundColor": "#F8F8F8",
-		"list": [
-			{
+		"list": [{
 				"pagePath": "pages/tabbar/member",
 				"iconPath": "static/tab-icon/list.png",
 				"selectedIconPath": "static/tab-icon/list-on.png",
