@@ -56,7 +56,7 @@ exports.main = async (event = {}, context) => {
 			msg: '联系电话不能为空'
 		}
 	}
-	const res = await collection.add(event)
+	const res = await collection.add(info)
 	return {
 		code: 0,
 		msg: 'ok'
