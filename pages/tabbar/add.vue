@@ -4,7 +4,7 @@
 		<form @submit="sendsj">
 			<view class="list">
 				<view class="list-title">人员信息</view>
-				<view class="list-item">姓名： <input name="xm" placeholder="请输入人员姓名" /></view>
+				<view class="list-item">姓名： <input name="name" placeholder="请输入人员姓名" /></view>
 				<view class="list-item">证件类型：<picker mode="selector" style="padding:0px;margin:0px;" range-key="lable" :range="zj"
 					 @change="zjChange">
 						<view class="xiala">{{zjlx}}
@@ -27,7 +27,7 @@
 						</view>
 					</picker>
 				</view>
-				<view class="list-item">联系电话：<input name="phonenumber" placeholder="请输入联系电话" /></view>
+				<view class="list-item">联系电话：<input name="phoneNumber" placeholder="请输入联系电话" /></view>
 			</view>
 			<view class="list">
 				<view class="list-title">来源地信息</view>
@@ -264,69 +264,52 @@
 					this.lzhb = "";
 				}
 			},
-			sendsj: function(e) {
-				this.senddata = [];
-				console.log(e.detail.value);
-				var obj = e.detail.value;
-				for (let key in obj) {
-					console.log(key + '---' + obj[key])
-					//this.senddata.push({'key':obj[key]})
-					this.senddata[key] = obj[key];
-				}
-				this.senddata['zjlx'] = this.zjlx; //证件类型
-				this.senddata['nl'] = this.xznl; //年龄
-				this.senddata['xb'] = this.xzxb; //性别
-				this.senddata['sfwh'] = this.lzwh; //是否来自武汉
-				this.senddata['sfhb'] = this.lzhb; //是否来看成湖北
-				this.senddata['cxfs'] = this.cxfs; //出行 方式
-				this.senddata['jcrq'] = this.jcrq; //检测日期
-				this.senddata['jcsj'] = this.jcsj; //检测时间
-				this.senddata['tw'] = this.tw; //检测时间
-				this.senddata['qtzz'] = this.otherzz; //其它症状
-				this.senddata['jcqz'] = this.jcqz; //接触确诊
-				this.senddata['jcys'] = this.jcys; //接触疑似
-				for (let nkey in this.senddata) {
-					this.senddata.push("{" + nkey + ":'" + this.senddata[nkey] + "'}");
-				}
-				if (this.senddata['xm'] == "" || this.senddata['phonenumber'] == "") {
+			sendsj: function({
+				detail
+			}) {
+				const info = Object.assign({}, detail.value, {
+
+				})
+				console.log(info)
+				if (!info.name || !info.phoneNumber) {
 					uni.showToast({
 						title: '姓名和电话不能为空',
 						icon: 'none'
 					})
-				} else {
-					var outstr = JSON.stringify(this.senddata);
-					outstr = outstr.replace(/"/g, "")
-					uni.showModal({
-						title: '获取的数据是：',
-						content: outstr,
-						success: function(res) {
-							if (res.confirm) {
-								console.log('用户点击确定');
-							} else if (res.cancel) {
-								console.log('用户点击取消');
-							}
-						}
-					});
+					return
 				}
-				console.log(this.senddata);
-
+				this.addUser(info)
 			},
-            addUser() {
-                uni.showLoading({
-                    title: "处理中..."
-                });
+			addUser(data) {
+				uni.showLoading({
+					title: "处理中..."
+				});
 
-                uniCloud.callFunction({
-                    name: 'add-member', // 云函数名
-                    data: {}, // 表单数据
-                    success: (res) => {
-                    },
-                    fail: (err) => {},
-                    complete: (c) => {
-                        uni.hideLoading();
-                    }
-                })
-            }
+				this.$cloud.callFunction({
+					name: 'add-member', // 云函数名
+					data, // 表单数据
+				}).then(({
+					result
+				}) => {
+					uni.hideLoading()
+					if (result.code === 0) {
+						uni.showToast({
+							title: '提交成功'
+						})
+					} else {
+						uni.showToast({
+							icon: 'none',
+							title: result.msg
+						})
+					}
+				}).catch(err => {
+					uni.hideLoading()
+					uni.showToast({
+						icon: 'none',
+						title: '提交失败'
+					})
+				})
+			}
 		}
 	}
 </script>
