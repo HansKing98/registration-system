@@ -32,7 +32,7 @@
 			this.ewm=QR.createQrCodeImg(ewmurl, {
 										size: 350
 									});
-		}
+		},
 		onShow() {
 			//TODO 此处需要根据登录设置适当调整
 			let that = this ;
@@ -78,7 +78,14 @@
 		display: flex;
 		flex-direction: column;
 		margin:20upx;
-        background:#f0f0f0;
+        background:#ffffff;
        margin:auto;
+	   justify-content: center;
+	   padding:20upx;
+	   width:750upx;
+	   text-align: center;
+	   border-top:#efefef 1upx solid;
+	  padding-top:40upx;
+	  line-height: 80upx;
 	}
 </style>

@@ -176,7 +176,6 @@ exports.main = async (event = {}, context) => {
 			msg: '记录添加成功'
 		}
 	} catch (e) {
-		return {e}
 		return {
 			code: -2,
 			msg: '记录添加失败'

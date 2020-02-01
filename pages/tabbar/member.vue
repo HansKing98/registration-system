@@ -99,6 +99,9 @@
 			//明细
 			openDetail: function(item) {
 				console.log(item)
+				uni.navigateTo({
+					url: `../member-detail/member-detail?item=${encodeURIComponent(JSON.stringify(item))}`
+				})
 			},
 			//标签搜索
 			tagQuery: function(e) {}
