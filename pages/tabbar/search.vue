@@ -1,33 +1,56 @@
-	//我在做这个文件，我的群昵称是King,QQ:36568008  
+//我在做这个文件，我的群昵称是King
 <template>
-	<view class="fixed">
-		<view class="search uni-flex bg-white" style="align-items: center;">
-			<uni-search-bar @confirm="search" v-model="searchKey"  style="flex:1" />
-		</view>
-		<view class="flex-sub" style="position: relative;">
-			<scroll-view scroll-y="true" style="position: absolute;width: 100%;height: 100%;padding-top: 20upx;" @scrolltolower="next">
-				<uni-list>
-					<uni-list-item v-for="(item,index) in list" :key="index"  @click="openDetail(item._id)" :title="item.name" :note="item.address"></uni-list-item>
-				</uni-list>
-				<view class="uni-flex" style="justify-content: center;padding: 10upx;">
-					{{contentText[loadingType]}}
+	<view>
+		<view class="search uni-flex" style="align-items: center;margin-bottom:20upx;padding:20upx;background-color:#0A98D5;">
+			<view class="uni-flex  bg-white" style="flex: 1;padding: 10upx 30upx;border-radius: 80upx;align-items: center;">
+				<picker :range="searchType" @change="change" >
+					<view style="display: flex;align-items: center;">{{searchType[index]}}<text class="uni-icon uni-icon-arrowdown" style="font-size: 16px;height: 16px;padding-left: 10upx;"></text></view>
+				</picker>
+				<input type="text" v-model="searchKey" :placeholder="'请输入搜索的'+searchType[index]" style="flex:1" @confirm="search" v-if="index<2" />
+				<view  style="display: flex;align-items: center;flex: 1;" v-if="index==2">
+					<input type="text" disabled="true" v-model="startDate"  placeholder="开始日期" style="border-bottom: 1px solid #d1d1d1;padding-left: 10upx;" @tap="openCalendar" />
+					<text style="padding: 0 10px;">至</text>
+					<input type="text" disabled="true"  v-model="endDate" placeholder="结束日期" style="border-bottom: 1px solid #d1d1d1;padding-left: 10upx;" @tap="openCalendar" />
 				</view>
-			</scroll-view>
+				<text class="uni-icon uni-icon-search" style="color: #999999;font-size: 24px;"></text>
+			</view>
+		
 		</view>
+		<uni-list>
+			<uni-list-item v-for="(item,index) in list" :key="index" @click="openDetail(item._id)" :title="item.name" :note="item.address"></uni-list-item>
+		</uni-list>
+		<view class="uni-flex" style="justify-content: center;padding: 10upx;">
+			{{contentText[loadingType]}}
+		</view>
+		<uni-calendar ref="calendar" :date="info.date" :insert="info.insert" :lunar="info.lunar" :startDate="info.startDate" :endDate="info.endDate" :range="info.range" @confirm="confirm" />
 	</view>
 </template>
 
 <script>
+	
 	var _this;
 	export default {
 		data() {
 			return {
-				searchKey:'',
+				searchKey: '',
 				list: [],
 				page: 1,
 				loadingType: 0,
-				contentText: ["上拉显示更多", "正在加载...","没有更多数据了"]
-				
+				index: 0,
+				searchType: ['姓名', '手机', '日期'],
+				showCalendar: false,
+				startDate:'',
+				endDate:'',
+				info: {
+					startDate: '2019-12-01',
+					endDate: '2025-10-15',
+					lunar: true,
+					range: true,
+					insert: false,
+					selected: []
+				},
+				contentText: ["上拉显示更多", "正在加载...", "没有更多数据了"]
+
 			}
 		},
 		onLoad() {
@@ -36,28 +59,46 @@
 		onShow() {
 			this.load();
 		},
+		onReachBottom() {
+			this.page = this.page + 1;
+			if (this.loadingType !== 0) {
+				return;
+			}
+			this.loadingType = 1;
+			this.load();
+		},
 		methods: {
-			input:function(res) {
-				this.searchKey = res.value
-			},
-			search:function(){
-				_this.reload();
-			},
-			next() {
-				this.page = this.page + 1;
-				if (this.loadingType !== 0) {
-					return;
+			change: function(e) {
+				this.index=e.detail.value;
+				if(this.index==2){
+					this.openCalendar();
 				}
-				this.loadingType = 1;
-				this.load();
+			},
+			openCalendar:function(){
+				this.$refs.calendar.open();
+			},
+			confirm:function(res){
+				this.startDate=res.range.data[0];
+				this.endDate=res.range.data[res.range.data.length-1];
+				this.search();
+			},
+			search: function() {
+				_this.reload();
 			},
 			load: function() {
 				uni.showLoading();
 				uniCloud.callFunction({
 					name: 'search',
-					data:{page:this.page,searchKey:this.searchKey.value,pageSize:10}
+					data: {
+						page: this.page,
+						startDate:this.startDate,
+						endDate:this.endDate,
+						searchKey: this.searchKey.value,
+						pageSize: 10
+					}
 				}).then((res) => {
 					uni.hideLoading();
+					console.log(res.result.data);
 					if (res.result.data.length == 0) {
 						this.loadingType = 2;
 						return;
@@ -72,11 +113,11 @@
 						showCancel: false
 					})
 				})
-				
+
 			},
-			openDetail:function(id){
+			openDetail: function(id) {
 				uni.navigateTo({
-					url:'../member-detail/member-detail?id='+id
+					url: '../member-detail/member-detail?id=' + id
 				})
 			},
 			reload: function() {
