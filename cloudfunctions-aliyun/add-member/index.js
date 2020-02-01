@@ -39,61 +39,61 @@ const defaultRecordInfo = {
 exports.main = async (event = {}, context) => {
 
 	// 测试数据
-	event = {
-		id_type: 0,
-		id_card: '341222198008086001',
-		name: '测试姓名',
-		phone: '18811118888',
-		age: 40,
-		sex: 2,
-		// 来自地区 {country: 0, province: 0, city: 0, district: 0, street: ""}
-		from_address: {
-			country: 0,
-			province: 0,
-			city: 0,
-			district: 0,
-			street: "测试地址"
-		},
-		from_hb: 0,
-		from_wh: 0,
-		// type:交通工具类型 0列车、1自驾车牌号、2公共汽车 car_plate: 交通工具信息
-		traffic: {
-			type: 0,
-			car_plate: 'K123'
-		},
-		temperature: '36.5',
-		// 现住址 {country: 0, province: 0, city: 0, district: 0, street: ""}
-		check_in_address: {
-			country: 0,
-			province: 0,
-			city: 0,
-			district: 0,
-			street: "测试地址"
-		},
-		check_in_time: Date.now(),
-		// 0普通、1居家隔离、2发烧、3疑似、4确诊、5死亡， 每个状态对应的发生时间，如隔离时间、确诊时间、死亡时间
-		body_status: {
-			status: 0,
-			time: Date.now()
-		},
-		// 是否接触过确诊人员、对方姓名和联系方式 {status: 0, name: "", contact: ""}, // 0没有, 1有，
-		contact_virus: {
-			status: 1,
-			name: "",
-			contact: ""
-		},
-		contact_like_virus: {
-			status: 1,
-			name: "",
-			contact: ""
-		},
-		contact_like_virus_region: {
-			status: 1,
-			name: "",
-			contact: ""
-		},
-		comment: '测试额外信息'
-	}
+	// event = {
+	// 	id_type: 0,
+	// 	id_card: '341222198008086001',
+	// 	name: '测试姓名',
+	// 	phone: '18811118888',
+	// 	age: 40,
+	// 	sex: 2,
+	// 	// 来自地区 {country: 0, province: 0, city: 0, district: 0, street: ""}
+	// 	from_address: {
+	// 		country: 0,
+	// 		province: 0,
+	// 		city: 0,
+	// 		district: 0,
+	// 		street: "测试地址"
+	// 	},
+	// 	from_hb: 0,
+	// 	from_wh: 0,
+	// 	// type:交通工具类型 0列车、1自驾车牌号、2公共汽车 car_plate: 交通工具信息
+	// 	traffic: {
+	// 		type: 0,
+	// 		car_plate: 'K123'
+	// 	},
+	// 	temperature: '36.5',
+	// 	// 现住址 {country: 0, province: 0, city: 0, district: 0, street: ""}
+	// 	check_in_address: {
+	// 		country: 0,
+	// 		province: 0,
+	// 		city: 0,
+	// 		district: 0,
+	// 		street: "测试地址"
+	// 	},
+	// 	check_in_time: Date.now(),
+	// 	// 0普通、1居家隔离、2发烧、3疑似、4确诊、5死亡， 每个状态对应的发生时间，如隔离时间、确诊时间、死亡时间
+	// 	body_status: {
+	// 		status: 0,
+	// 		time: Date.now()
+	// 	},
+	// 	// 是否接触过确诊人员、对方姓名和联系方式 {status: 0, name: "", contact: ""}, // 0没有, 1有，
+	// 	contact_virus: {
+	// 		status: 1,
+	// 		name: "",
+	// 		contact: ""
+	// 	},
+	// 	contact_like_virus: {
+	// 		status: 1,
+	// 		name: "",
+	// 		contact: ""
+	// 	},
+	// 	contact_like_virus_region: {
+	// 		status: 1,
+	// 		name: "",
+	// 		contact: ""
+	// 	},
+	// 	comment: '测试额外信息'
+	// }
 	const memberCollection = db.collection('member')
 	const recordCollection = db.collection('member_list')
 	// TODO 操作记录更新
