@@ -20,14 +20,14 @@
 			</view>
 			<view class="list-item">
 				<text>年龄：</text>
-				<slider value="20" min="0" step="1" max="120" show-value @change="ageChange" />
+				<slider :value="age" min="0" step="1" max="120" show-value @change="ageChange" />
 			</view>
 			<view class="list-item">
 				<text>性别： </text>
 				<radio-group @change="sexChange">
 					<label>
-						<radio value="1" /><text>男</text>
-						<radio value="0" /><text>女</text>
+						<radio value="1" :checked="sex=='1'" /><text>男</text>
+						<radio value="0" :checked="sex=='0'" /><text>女</text>
 					</label>
 				</radio-group>
 			</view>
@@ -282,12 +282,33 @@
 			},
 			bodyStatusTime() {
 				this.getBodyStatusTimeStamp()
-			}
+			},
+			id_type() {
+				this.parseIdCard()
+			},
+			id_card() {
+				this.parseIdCard()
+			},
 		},
 		onLoad() {
 
 		},
 		methods: {
+			parseIdCard() {
+				if (this.id_type == 0) {
+					if (this.id_card.length == 18) {
+						let year = parseInt(this.id_card.substr(6, 4));
+						let mark = parseInt(this.id_card.substr(16, 1));
+						if (!isNaN(year)) {
+							this.age = new Date().getFullYear() - year;
+						}
+						if (!isNaN(mark)) {
+							this.sex = mark
+						}
+						console.log(this.sex);
+					}
+				}
+			},
 			idTypeChange(e) {
 				this.id_type = e.detail.value
 			},
@@ -385,7 +406,7 @@
 					comment
 				} = this
 				uni.showLoading({
-					title:'上传中...'
+					title: '上传中...'
 				})
 				this.$cloud.callFunction({
 					name: 'add-member',
@@ -413,7 +434,7 @@
 					uni.hideLoading()
 					if (res.result.code === 0) {
 						uni.showModal({
-							content: '信息上传完成',
+							content: '信息上传完成，请勿重复提交',
 							showCancel: false
 						})
 					} else {
