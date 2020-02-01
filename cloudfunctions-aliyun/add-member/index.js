@@ -72,7 +72,10 @@ exports.main = async (event = {}, context) => {
 		},
 		check_in_time: Date.now(),
 		// 0普通、1居家隔离、2发烧、3疑似、4确诊、5死亡， 每个状态对应的发生时间，如隔离时间、确诊时间、死亡时间
-		body_status: 0,
+		body_status: {
+			status: 0,
+			time: Date.now()
+		},
 		// 是否接触过确诊人员、对方姓名和联系方式 {status: 0, name: "", contact: ""}, // 0没有, 1有，
 		contact_virus: {
 			status: 1,
