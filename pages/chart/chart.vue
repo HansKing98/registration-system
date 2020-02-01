@@ -14,7 +14,7 @@
 			<view class="qiun-bg-white qiun-title-bar qiun-common-mt">
 				<view class="qiun-title-dot-light">登记表</view>
 			</view>
-			<z-table :tableData='tableData' :columns='columns' showBottomSum="true"></z-table>
+			<z-table :tableData='tableData' :columns='columns' :showBottomSum="true"></z-table>
 		</view>
 	</view>
 </template>
@@ -34,7 +34,7 @@
 				cWidth: '',
 				cHeight: '',
 				pixelRatio: 1,
-				sign: false,
+				sign: true,
 				titles: ['普通', '居家隔离', '发烧', '疑似', '确诊', '死亡'],
 				tableData: [],
 				columns: []
@@ -58,11 +58,11 @@
 					success: (res) => {
 						if (res.result.data && res.result.data.length > 0) {
 							this.fillData(res.result.data);
-						} else {
-							this.sign = true;
+							this.sign = false;
 						}
 					},
 					fail: (err) => {
+						console.log('err', err)
 						uni.hideLoading();
 					},
 					complete: (c) => {
@@ -121,10 +121,7 @@
 				this.getTableData(statusDatas, initDates);
 			},
 			getTableData(seriesList, dateList) {
-				let [tableData, columns] = [
-					[],
-					[]
-				];
+				let tableData = [];
 				for (let i in dateList) {
 					let temp = {};
 					temp["date"] = dateList[i];
@@ -222,5 +219,3 @@
 		background-color: #FFFFFF;
 	}
 </style>
-日期 普通 居家隔离 发烧 疑似 确诊 死亡 总数
-{date: 10, status0: 0, status1: 1,status2: 1,status3: 1,status4: 1,status5: 1, sum: 10}
