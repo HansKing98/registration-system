@@ -57,7 +57,7 @@
 			_this = this;
 		},
 		onShow() {
-			this.load();
+			this.reload();
 		},
 		onReachBottom() {
 			this.page = this.page + 1;
