@@ -53,7 +53,7 @@
 			},
 			load: function() {
 				uni.showLoading();
-				uniCloud.callFunction({
+				this.$cloud.callFunction({
 					name: 'search',
 					data:{page:this.page,searchKey:this.searchKey.value,pageSize:10}
 				}).then((res) => {
