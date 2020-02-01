@@ -4,7 +4,7 @@
 		<form @submit="sendsj">
 			<view class="list">
 				<view class="list-title">人员信息</view>
-				<view class="list-item">姓名： <input name="xm" placeholder="请输入人员姓名" /></view>
+				<view class="list-item">姓名： <input name="xm" value="李思思" placeholder="请输入人员姓名" /></view>
 				<view class="list-item">证件类型：<picker mode="selector" style="padding:0px;margin:0px;" range-key="lable" :range="zj"
 					 @change="zjChange">
 						<view class="xiala">{{zjlx}}
@@ -12,7 +12,7 @@
 						</view>
 					</picker>
 				</view>
-				<view class="list-item">证件号码：<input name="zjhm" placeholder="请输入证件号码" /></view>
+				<view class="list-item">证件号码：<input name="zjhm" placeholder="请输入证件号码" type="number" @blur="checkzj" /></view>
 				<view class="list-item">年龄：<picker mode="selector" style="padding:0px;margin:0px;" range-key="lable" :range="nl"
 					 @change="nlChange">
 						<view class="xiala">{{xznl}}
@@ -27,7 +27,7 @@
 						</view>
 					</picker>
 				</view>
-				<view class="list-item">联系电话：<input name="phonenumber" placeholder="请输入联系电话" /></view>
+				<view class="list-item">联系电话：<input name="phonenumber" value="32323" placeholder="请输入联系电话" /></view>
 			</view>
 			<view class="list">
 				<view class="list-title">来源地信息</view>
@@ -38,6 +38,10 @@
 					 type="warn" v-if="lzhb==''" size="mini" style="margin-left:30upx;" @click="jcly(4)">否</button><button size="mini"
 					 v-if="lzhb!=''" @click="cxly(2)">{{lzhb}}</button></view>
 				<view class="list-item">来源地详细地址：<input name="lydaddr" placeholder="请输入地址" /></view>
+				<view class="list-item">出行时间： <picker @change="cxdate" mode="date">
+						<button size="mini">{{cxrq}}</button>
+					</picker>
+				</view>
 				<view class="list-item">出行方式：<picker mode="selector" style="padding:0px;margin:0px;" range-key="lable" :range="cx"
 					 @change="cxfsChange">
 						<view class="xiala">{{cxfs}}
@@ -45,11 +49,18 @@
 						</view>
 					</picker>
 				</view>
-				<view v-if="cxlx!=''" class="list-item">{{cxlx}}：<input placeholder="请务必输入正确的信息" /></view>
-				<view class="list-item">现居地详细地址：<input name="xjd" placeholder="请输入详细地址" /></view>
+				<view v-if="cxlx!=''" class="list-item">{{cxlx}}：<input name="cxfshm" placeholder="请务必输入正确的信息" /></view>
+				<view class="list-item">到访地址：<input name="xjd" placeholder="请输入详细地址" /></view>
+				<view class="list-item">联系人电话：<input name="lxr" type="number" placeholder="请输入联系人电话" /></view>
 			</view>
 			<view class="list">
 				<view class="list-title">健康状况</view>
+				<view class="list-item">是否确诊人员：<button v-if="sfqz==''" type="primary" size="mini" @click="jcry(5)">是</button><button
+					 type="warn" v-if="sfqz==''" size="mini" style="margin-left:30upx;" @click="jcry(6)">否</button><button v-if="sfqz!=''"
+					 @click="cxjc(3)" size="mini">{{sfqz}}</button></view>
+				<view class="list-item"  v-if="sfqz!='是'">是否疑似人员：<button v-if="sfys==''" type="primary" size="mini" @click="jcry(7)">是</button><button
+					 	 type="warn" v-if="sfys==''" size="mini" style="margin-left:30upx;" @click="jcry(8)">否</button><button v-if="sfys!=''"
+					 	 @click="cxjc(4)" size="mini">{{sfys}}</button></view>
 				<view class="list-item">体温：
 					<slider value="37" @change="twChange" min="36.5" step="0.1" max="40" show-value style="width: 400upx;" />
 				</view>
@@ -70,17 +81,17 @@
 						</label>
 					</checkbox-group>
 				</view>
-				<view class="list-item">是否接触确诊人员：<button v-if="jcqz==''" type="primary" size="mini" @click="jcry(1)">是</button><button
+				<view class="list-item" v-if="sfqz!='是'&&sfys!='是'">是否接触确诊人员：<button v-if="jcqz==''" type="primary" size="mini" @click="jcry(1)">是</button><button
 					 type="warn" v-if="jcqz==''" size="mini" style="margin-left:30upx;" @click="jcry(2)">否</button><button v-if="jcqz!=''"
 					 @click="cxjc(1)" size="mini">{{jcqz}}</button></view>
 				<view v-if="jcqz=='是'">
 					<view class="list-item">接触人员姓名： <input name="jcname" placeholder="请输入人员姓名" /></view>
 					<view class="list-item">接触人员电话：<input name="jcphone" placeholder="请输入联系电话" /></view>
 				</view>
-				<view class="list-item">是否接触疑似人员：<button v-if="jcys==''" type="primary" size="mini" @click="jcry(3)">是</button><button
+				<view class="list-item" v-if="sfqz!='是'&&sfys!='是'">是否接触疑似人员：<button v-if="jcys==''" type="primary" size="mini" @click="jcry(3)">是</button><button
 					 type="warn" v-if="jcys==''" size="mini" style="margin-left:30upx;" @click="jcry(4)">否</button><button v-if="jcys!=''"
 					 @click="cxjc(2)" size="mini">{{jcys}}</button></view>
-				<view v-if="jcys=='是'">
+				<view v-if="jcys=='是'"> 
 					<view class="list-item">接触人员姓名： <input name="ysname" placeholder="请输入人员姓名" /></view>
 					<view class="list-item">接触人员电话：<input name="ysphone" placeholder="请输入联系电话" /></view>
 				</view>
@@ -137,8 +148,11 @@
 				cxlx: '',
 				jcsj: '选择时间',
 				jcrq: '选择日期',
+				cxrq:'选择日期',
 				lzwh: '',
 				lzhb: '',
+				sfqz:'',//是否确诊
+				sfys:'',//是否疑似
 				jcqz: '',
 				jcys: '',
 				tw: 0, //体温
@@ -169,7 +183,7 @@
 					}
 
 				],
-				senddata: [] //存放最终的表单数据
+				senddata: {} //存放最终的表单数据
 			}
 		},
 		onLoad() {
@@ -216,6 +230,10 @@
 				console.log(e.detail.value);
 				this.jcrq = e.detail.value;
 			},
+			cxdate: function(e) {
+				console.log(e.detail.value);
+				this.cxrq = e.detail.value;
+			},
 			jctime: function(e) {
 				console.log(e.detail.value);
 				this.jcsj = e.detail.value;
@@ -226,6 +244,12 @@
 				}
 				if (e == 2) {
 					this.jcys = '';
+				}
+				if (e == 3) {
+					this.sfqz = '';
+				}
+				if (e == 4) {
+					this.sfys = '';
 				}
 			},
 			jcry: function(e) {
@@ -241,6 +265,19 @@
 				if (e == 4) {
 					this.jcys = "否";
 				}
+				if (e == 5) {
+					this.sfqz = "是";
+				}
+				if (e == 6) {
+					this.sfqz = "否";
+				}
+				if (e == 7) {
+					this.sfys = "是";
+				}
+				if (e == 8) {
+					this.sfys = "否";
+				}
+				
 			},
 			jcly: function(e) {
 				if (e == 1) {
@@ -265,7 +302,7 @@
 				}
 			},
 			sendsj: function(e) {
-				this.senddata = [];
+				this.senddata = {};
 				console.log(e.detail.value);
 				var obj = e.detail.value;
 				for (let key in obj) {
@@ -285,9 +322,9 @@
 				this.senddata['qtzz'] = this.otherzz; //其它症状
 				this.senddata['jcqz'] = this.jcqz; //接触确诊
 				this.senddata['jcys'] = this.jcys; //接触疑似
-				for (let nkey in this.senddata) {
-					this.senddata.push("{" + nkey + ":'" + this.senddata[nkey] + "'}");
-				}
+				this.senddata['sfqz'] = this.sfqz; //是否确诊
+				this.senddata['sfys'] = this.sfys; //是否疑似
+				
 				if (this.senddata['xm'] == "" || this.senddata['phonenumber'] == "") {
 					uni.showToast({
 						title: '姓名和电话不能为空',
@@ -295,7 +332,17 @@
 					})
 				} else {
 					var outstr = JSON.stringify(this.senddata);
-					outstr = outstr.replace(/"/g, "")
+					uni.request({
+					    url: 'https://www.anjnet.com/xinguan.php/index/addmember', //仅为示例，并非真实接口地址。
+					    data: {
+					        data: outstr
+					    },
+					   method:'POST',
+					    success: (res) => {
+					        console.log(res.data);
+					        this.text = 'request success';
+					    }
+					});
 					uni.showModal({
 						title: '获取的数据是：',
 						content: outstr,
@@ -311,22 +358,32 @@
 				console.log(this.senddata);
 
 			},
-            addUser() {
-                uni.showLoading({
-                    title: "处理中..."
-                });
-
-                uniCloud.callFunction({
-                    name: 'add-member', // 云函数名
-                    data: {}, // 表单数据
-                    success: (res) => {
-                    },
-                    fail: (err) => {},
-                    complete: (c) => {
-                        uni.hideLoading();
-                    }
-                })
-            }
+			checkzj:function(e){
+				if(this.zjlx=="身份证"||this.zjlx=="驾驶证")
+				{
+					if(e.detail.value.length==18){
+						let nian=parseInt(e.detail.value.substr(6,4));
+						let ckxb=parseInt(e.detail.value.substr(16,1));
+						if(!isNaN(nian)){
+							this.xznl=2020-nian;
+						}
+						
+						if(!isNaN(ckxb)){
+							if(ckxb==1){
+								this.xzxb="男";
+							}
+							if(ckxb==0){
+								this.xzxb="女";
+							}
+						}
+						
+					}
+					else{
+						console.log("no");
+					}
+				}
+				console.log(e.detail.value);
+			}
 		}
 	}
 </script>
