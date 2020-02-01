@@ -3,18 +3,22 @@
 	<view>
 		<view class="search uni-flex" style="align-items: center;margin-bottom:20upx;padding:20upx;background-color:#0A98D5;">
 			<view class="uni-flex  bg-white" style="flex: 1;padding: 10upx 30upx;border-radius: 80upx;align-items: center;">
-				<picker :range="searchType" @change="change" >
-					<view style="display: flex;align-items: center;">{{searchType[index]}}<text class="uni-icon uni-icon-arrowdown" style="font-size: 16px;height: 16px;padding-left: 10upx;"></text></view>
+				<picker :range="searchType" @change="change">
+					<view style="display: flex;align-items: center;">{{searchType[index]}}<text class="uni-icon uni-icon-arrowdown"
+						 style="font-size: 16px;height: 16px;padding-left: 10upx;"></text></view>
 				</picker>
-				<input type="text" v-model="searchKey" :placeholder="'请输入搜索的'+searchType[index]" style="flex:1" @confirm="search" v-if="index<2" />
-				<view  style="display: flex;align-items: center;flex: 1;" v-if="index==2">
-					<input type="text" disabled="true" v-model="startDate"  placeholder="开始日期" style="border-bottom: 1px solid #d1d1d1;padding-left: 10upx;" @tap="openCalendar" />
+				<input type="text" v-model="searchKey" :placeholder="'请输入搜索的'+searchType[index]" style="flex:1" @confirm="search"
+				 v-if="index<2" />
+				<view style="display: flex;align-items: center;flex: 1;" v-if="index==2">
+					<input type="text" disabled="true" v-model="startDate" placeholder="开始日期" style="border-bottom: 1px solid #d1d1d1;padding-left: 10upx;"
+					 @tap="openCalendar" />
 					<text style="padding: 0 10px;">至</text>
-					<input type="text" disabled="true"  v-model="endDate" placeholder="结束日期" style="border-bottom: 1px solid #d1d1d1;padding-left: 10upx;" @tap="openCalendar" />
+					<input type="text" disabled="true" v-model="endDate" placeholder="结束日期" style="border-bottom: 1px solid #d1d1d1;padding-left: 10upx;"
+					 @tap="openCalendar" />
 				</view>
 				<text class="uni-icon uni-icon-search" style="color: #999999;font-size: 24px;" @tap="search"></text>
 			</view>
-		
+
 		</view>
 		<uni-list>
 			<uni-list-item v-for="(item,index) in list" :key="index" @click="openDetail(item._id)" :title="item.name" :note="item.address"></uni-list-item>
@@ -22,12 +26,19 @@
 		<view class="uni-flex" style="justify-content: center;padding: 10upx;">
 			{{contentText[loadingType]}}
 		</view>
-		<uni-calendar ref="calendar" :date="info.date" :insert="info.insert" :lunar="info.lunar" :startDate="info.startDate" :endDate="info.endDate" :range="info.range" @confirm="confirm" />
+		<uni-calendar ref="calendar" :date="info.date" :insert="info.insert" :lunar="info.lunar" :startDate="info.startDate"
+		 :endDate="info.endDate" :range="info.range" @confirm="confirm" />
 	</view>
 </template>
 
 <script>
-	
+	// #ifdef H5
+	import xlsxUtil from '@/common/xlsxUtil.js'
+	import fileSaver from 'file-saver'
+	import {
+		exportTitle
+	} from "@/common/name.js"
+	// #endif
 	var _this;
 	export default {
 		data() {
@@ -39,8 +50,8 @@
 				index: 0,
 				searchType: ['姓名', '手机', '日期'],
 				showCalendar: false,
-				startDate:'',
-				endDate:'',
+				startDate: '',
+				endDate: '',
 				info: {
 					startDate: '2019-12-01',
 					endDate: '2025-10-15',
@@ -69,17 +80,17 @@
 		},
 		methods: {
 			change: function(e) {
-				this.index=e.detail.value;
-				if(this.index==2){
+				this.index = e.detail.value;
+				if (this.index == 2) {
 					this.openCalendar();
 				}
 			},
-			openCalendar:function(){
+			openCalendar: function() {
 				this.$refs.calendar.open();
 			},
-			confirm:function(res){
-				this.startDate=res.range.data[0];
-				this.endDate=res.range.data[res.range.data.length-1];
+			confirm: function(res) {
+				this.startDate = res.range.data[0];
+				this.endDate = res.range.data[res.range.data.length - 1];
 				this.search();
 			},
 			search: function() {
@@ -91,8 +102,8 @@
 					name: 'search',
 					data: {
 						page: this.page,
-						startDate:this.startDate,
-						endDate:this.endDate,
+						startDate: this.startDate,
+						endDate: this.endDate,
 						searchKey: this.searchKey,
 						pageSize: 10
 					}
@@ -125,8 +136,38 @@
 				_this.loadingType = 0;
 				_this.list = [];
 				_this.load();
+			},
+			// #ifdef H5
+			exportTableData() {
+				let arr = [];
+				for (let data of _this.list) {
+					let info = {};
+					Object.keys(exportTitle).map((key) => {
+						if (typeof exportTitle[key] === 'object') {
+							Object.keys(exportTitle[key]).map((k) => {
+								info[exportTitle[key][k]] = data[key] && (k in data[key]) ? data[key][k] : ''
+							})
+
+						} else {
+							info[exportTitle[key]] = key in data ? data[key] : ''
+						}
+					})
+					arr.push(info)
+				}
+				const xlsx = xlsxUtil.jsonToExcel(arr, 'Sheet1')
+				const blob = new Blob([xlsx], {
+					type: 'application/octet-stream'
+				})
+				fileSaver.saveAs(blob, 'Info.xlsx')
 			}
-		}
+			// #endif
+		},
+		onNavigationBarButtonTap(e) {
+			// #ifdef H5
+			_this.exportTableData()
+			console.log("success")
+			// #endif
+		},
 	}
 </script>
 
