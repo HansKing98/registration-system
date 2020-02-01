@@ -5,6 +5,9 @@
 			<uni-tag style="margin: 5upx 5upx;" v-for="(item,index) in tags" :key="index" @click="tagQuery(index)" :text="item.text"
 			 :type="item.type"></uni-tag>
 		</view> -->
+		<view v-if="!members.length" class="none">
+			暂无数据
+		</view>
 		<view class="flex-item flex-item-V uni-bg-blue">
 			<uni-list>
 				<uni-list-item v-for="(item,index) in members" :key="index" @click="openDetail(item)" :title="item.name" :note="item.address||'地址未填写'"></uni-list-item>
@@ -124,5 +127,11 @@
 		flex-direction: row;
 		flex-wrap: wrap;
 		padding: 10px 10px;
+	}
+
+	.none {
+		text-align: center;
+		color: #CCCCCC;
+		line-height: 100px;
 	}
 </style>
