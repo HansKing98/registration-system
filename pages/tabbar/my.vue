@@ -78,7 +78,14 @@
 		display: flex;
 		flex-direction: column;
 		margin:20upx;
-        background:#f0f0f0;
+        background:#ffffff;
        margin:auto;
+	   justify-content: center;
+	   padding:20upx;
+	   width:750upx;
+	   text-align: center;
+	   border-top:#efefef 1upx solid;
+	  padding-top:40upx;
+	  line-height: 80upx;
 	}
 </style>
