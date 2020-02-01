@@ -17,7 +17,7 @@
 				<view class="items">性别：{{ryinfo.sex|sex}}</view>
 				<view class="items">年龄：{{ryinfo['age']}}岁</view>
 				<view class="items">证件类型：{{ryinfo.id_type|idType}}</view>
-				<view class="items">证件号码：{{ryinfo.id_card}}</view>
+				<view class="items">证件号码：{{ryinfo.id_card||'未知'}}</view>
 				<view class="items">联系电话：{{ryinfo.phone}}</view>
 			</view>
 			<view class="xq-title">来源地信息</view>
@@ -25,7 +25,7 @@
 				<view class="items">是否来自武汉：{{ryinfo.from_wh|boolean}}</view>
 				<view class="items">是否来自湖北：{{ryinfo.from_hb|boolean}}</view>
 				<view class="items">出行方式：{{ryinfo.traffic.type|trafficType}}</view>
-				<view class="items">车牌或列车号：{{ryinfo.traffic.car_plate}}</view>
+				<view class="items">车牌或列车号：{{ryinfo.traffic.car_plate||'未知'}}</view>
 				<view class="items">来源：{{ryinfo.from_address|addres}}</view>
 				<view class="items">现居：{{ryinfo.check_in_address|addres}}</view>
 			</view>
@@ -88,10 +88,10 @@
 				return val ? '是' : '否'
 			},
 			trafficType(val) {
-				return (['列车', '自驾车牌号', '公共汽车'])[val]
+				return (['列车', '自驾车牌号', '公共汽车'])[val] || '未知'
 			},
 			addres(val) {
-				return typeof val === 'object' ? val.street : val
+				return (typeof val === 'object' ? val.street : val) || '未知'
 			},
 			formatTime(val) {
 				if (!val) {
