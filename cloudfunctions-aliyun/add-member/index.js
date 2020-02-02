@@ -249,7 +249,7 @@ async function validateToken(token) {
 	if (userInfoDB.exp > Date.now() && checkUser(userFromToken, userInfoDB)) {
 		return {
 			code: 0,
-			phone: userInfoDB.phone,
+			username: userInfoDB.username,
 			msg: 'token验证成功'
 		}
 	}
@@ -317,23 +317,40 @@ const defaultRecordInfo = {
 };
 
 var main = async (event = {}, context) => {
-	let validateResult;
-	try {
-		validateResult = await validateToken$1(event.token);
-	} catch (e) {
-		//TODO handle the exception
-		return {
-			code: -3,
-			errCode: 'TOKEN_INVALID',
-			msg: '登录状态无效，请重新登录'
-		}
-	}
+	let operator_username = event.operator_username;
 
-	if (validateResult.code !== 0) {
-		return {
-			code: -3,
-			errCode: 'TOKEN_INVALID',
-			msg: '登录状态无效，请重新登录'
+	if (!operator_username) {
+		let validateResult;
+		try {
+			validateResult = await validateToken$1(event.token);
+		} catch (e) {
+			//TODO handle the exception
+			return {
+				code: -3,
+				errCode: 'TOKEN_INVALID',
+				msg: '登录状态无效，请重新登录'
+			}
+		}
+
+		if (validateResult.code !== 0) {
+			return {
+				code: -3,
+				errCode: 'TOKEN_INVALID',
+				msg: '登录状态无效，请重新登录'
+			}
+		}
+		operator_username = validateResult.username;
+	} else {
+		const userCollection = db$1.collection('user');
+		let checkOperatorResult = await userCollection.where({
+			username: operator_username
+		}).get();
+		if (checkOperatorResult.data && checkOperatorResult.data.length === 0) {
+			return {
+				code: -4,
+				errCode: 'OPERATOR_ID_INVALID',
+				msg: '操作员信息无效，请重新扫码录入'
+			}
 		}
 	}
 
@@ -342,7 +359,7 @@ var main = async (event = {}, context) => {
 	if (event.check_in_time) {
 		event.check_in_time = new Date(event.check_in_time).toISOString();
 	}
-	
+
 	if (event.body_status && event.body_status.time) {
 		event.body_status.time = new Date(event.body_status.time).toISOString();
 	}
@@ -473,7 +490,8 @@ var main = async (event = {}, context) => {
 
 		const recordUpdateResult = await recordCollection.add({
 			...recordInfo,
-			member_id
+			member_id,
+			operator_username
 		});
 
 		// TODO 操作记录更新

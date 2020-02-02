@@ -223,19 +223,11 @@ function base64urlEscape(str) {
 
 var jwtSimple = jwt_1;
 
-const loginConfig = {
-	AppId: '', //微信小程序AppId
-	AppSecret: '' //微信小程序AppSecret
-};
-
-const passSecret = ''; //用于用户数据库密码加密的密钥，使用一个比较长的随机字符串即可
-
-//上面三个字段非常重要！！！
+const passSecret = ''; //用于用户数据库密码加密的密钥，使用一个比较长的随机字符串即可，正式上线是切记更换
 
 const tokenExp = 30 * 24 * 3600000;
 
 var constants = {
-	loginConfig,
 	passSecret,
 	tokenExp
 };
@@ -265,16 +257,16 @@ const db = uniCloud.database();
 
 async function login(event) {
 	const {
-		phone,
+		username,
 		password
 	} = event;
 	
 	let userInfo = {
-		phone
+		username
 	};
 
 	const userInDB = await db.collection('user').where({
-		phone,
+		username,
 		password: encryptPassword$1(password)
 	}).get();
 
@@ -284,7 +276,7 @@ async function login(event) {
 	if (userInDB.data && userInDB.data.length === 0) {
 		return {
 			code: -1,
-			msg: '手机号或密码不正确'
+			msg: '用户名或密码不正确'
 		}
 	} else {
 		userUpdateResult = await db.collection('user').doc(userInDB.data[0]._id).update({
@@ -297,6 +289,7 @@ async function login(event) {
 		return {
 			code: 0,
 			token,
+			username,
 			msg: '登录成功'
 		}
 	}

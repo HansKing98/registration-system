@@ -11,16 +11,16 @@ const db = uniCloud.database()
 
 async function login(event) {
 	const {
-		phone,
+		username,
 		password
 	} = event
 	
 	let userInfo = {
-		phone
+		username
 	}
 
 	const userInDB = await db.collection('user').where({
-		phone,
+		username,
 		password: encryptPassword(password)
 	}).get()
 
@@ -30,7 +30,7 @@ async function login(event) {
 	if (userInDB.data && userInDB.data.length === 0) {
 		return {
 			code: -1,
-			msg: '手机号或密码不正确'
+			msg: '用户名或密码不正确'
 		}
 	} else {
 		userUpdateResult = await db.collection('user').doc(userInDB.data[0]._id).update({
@@ -43,6 +43,7 @@ async function login(event) {
 		return {
 			code: 0,
 			token,
+			username,
 			msg: '登录成功'
 		}
 	}

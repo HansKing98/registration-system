@@ -11,13 +11,12 @@ const db = uniCloud.database()
 
 async function signUp(event) {
 	const {
-		phone,
-		password,
-		username
+		username,
+		password
 	} = event
 
 	let userInfo = {
-		phone
+		username
 	}
 
 	const userInDB = await db.collection('user').where(userInfo).get()
@@ -30,7 +29,6 @@ async function signUp(event) {
 		userUpdateResult = await db.collection('user').add({
 			...userInfo,
 			password: encryptPassword(password),
-			username,
 			tokenSecret,
 			exp: Date.now() + tokenExp
 		})
@@ -59,17 +57,8 @@ async function signUp(event) {
 
 async function signUpMany() {
 	const userList = [{
-		phone: '18811112222',
-		password: '111222',
-		username: '操作员1'
-	}, {
-		phone: '18822223333',
-		password: '222333',
-		username: '操作员2'
-	}, {
-		phone: '18833334444',
-		password: '333444',
-		username: '操作员3'
+		username: 'admin',
+		password: '123456'
 	}]
 
 	let resultList = [];
@@ -84,11 +73,12 @@ async function signUpMany() {
 	
 	if (signUpManyResult) {
 		return {
-			msg: '操作员账号注册完成'
+			msg: '操作员账号注册完成',
+			userList
 		}
 	} else {
 		return {
-			msg: '一个或多个操作员账号注册失败'
+			msg: '一个或多个操作员账号注册失败，请检查是否已经添加了操作员账号'
 		}
 	}
 }

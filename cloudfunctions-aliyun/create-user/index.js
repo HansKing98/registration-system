@@ -223,19 +223,11 @@ function base64urlEscape(str) {
 
 var jwtSimple = jwt_1;
 
-const loginConfig = {
-	AppId: '', //微信小程序AppId
-	AppSecret: '' //微信小程序AppSecret
-};
-
-const passSecret = ''; //用于用户数据库密码加密的密钥，使用一个比较长的随机字符串即可
-
-//上面三个字段非常重要！！！
+const passSecret = ''; //用于用户数据库密码加密的密钥，使用一个比较长的随机字符串即可，正式上线是切记更换
 
 const tokenExp = 30 * 24 * 3600000;
 
 var constants = {
-	loginConfig,
 	passSecret,
 	tokenExp
 };
@@ -265,13 +257,12 @@ const db = uniCloud.database();
 
 async function signUp(event) {
 	const {
-		phone,
-		password,
-		username
+		username,
+		password
 	} = event;
 
 	let userInfo = {
-		phone
+		username
 	};
 
 	const userInDB = await db.collection('user').where(userInfo).get();
@@ -284,7 +275,6 @@ async function signUp(event) {
 		userUpdateResult = await db.collection('user').add({
 			...userInfo,
 			password: encryptPassword$1(password),
-			username,
 			tokenSecret,
 			exp: Date.now() + tokenExp$1
 		});
@@ -313,17 +303,8 @@ async function signUp(event) {
 
 async function signUpMany() {
 	const userList = [{
-		phone: '18811112222',
-		password: '111222',
-		username: '操作员1'
-	}, {
-		phone: '18822223333',
-		password: '222333',
-		username: '操作员2'
-	}, {
-		phone: '18833334444',
-		password: '333444',
-		username: '操作员3'
+		username: 'admin',
+		password: '123456'
 	}];
 
 	let resultList = [];
@@ -338,20 +319,21 @@ async function signUpMany() {
 	
 	if (signUpManyResult) {
 		return {
-			msg: '操作员账号注册完成'
+			msg: '操作员账号注册完成',
+			userList
 		}
 	} else {
 		return {
-			msg: '一个或多个操作员账号注册失败'
+			msg: '一个或多个操作员账号注册失败，请检查是否已经添加了操作员账号'
 		}
 	}
 }
 
 var main = signUpMany;
 
-var signUpMany_1 = {
+var createUser = {
 	main: main
 };
 
-exports.default = signUpMany_1;
+exports.default = createUser;
 exports.main = main;

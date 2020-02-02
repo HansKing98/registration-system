@@ -268,7 +268,8 @@
 					name: '',
 					contact: ''
 				},
-				comment: ''
+				comment: '',
+				operator_username: ''
 			}
 		},
 		computed: {
@@ -290,8 +291,13 @@
 				this.parseIdCard()
 			},
 		},
-		onLoad() {
-
+		onLoad(e) {
+			this.operator_username = e.id
+			if (this.operator_username) {
+				uni.hideTabBar({
+					animation: false
+				})
+			}
 		},
 		methods: {
 			parseIdCard() {
@@ -403,7 +409,8 @@
 					contact_virus,
 					contact_like_virus,
 					contact_like_virus_region,
-					comment
+					comment,
+					operator_username
 				} = this
 				uni.showLoading({
 					title: '上传中...'
@@ -429,7 +436,8 @@
 						contact_like_virus,
 						contact_like_virus_region,
 						comment,
-						token: uni.getStorageSync('token')
+						token: uni.getStorageSync('token'),
+						operator_username
 					}
 				}).then((res) => {
 					uni.hideLoading()

@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<view class="section">
-			<input v-model="phone" placeholder="手机号" />
+			<input v-model="username" placeholder="用户名" />
 		</view>
 		<view class="section">
 			<input v-model="password" password="true" placeholder="密码" />
@@ -15,17 +15,17 @@
 	export default {
 		data() {
 			return {
-				phone: '',
+				username: '',
 				password: '',
 			};
 		},
 		methods: {
 			login() {
 				const {
-					phone,
+					username,
 					password
 				} = this
-				if (!phone) {
+				if (!username) {
 					uni.showModal({
 						content: '请填写手机号码',
 						showCancel: false
@@ -45,7 +45,7 @@
 				this.$cloud.callFunction({
 					name: 'login',
 					data: {
-						phone,
+						username,
 						password,
 					}
 				}).then((res) => {
@@ -56,6 +56,7 @@
 							icon: 'none'
 						})
 						uni.setStorageSync('token', res.result.token)
+						uni.setStorageSync('username', res.result.username)
 						uni.switchTab({
 							url: '/pages/tabbar/member'
 						})

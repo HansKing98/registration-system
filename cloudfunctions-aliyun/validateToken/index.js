@@ -249,7 +249,7 @@ async function validateToken(token) {
 	if (userInfoDB.exp > Date.now() && checkUser(userFromToken, userInfoDB)) {
 		return {
 			code: 0,
-			phone: userInfoDB.phone,
+			username: userInfoDB.username,
 			msg: 'token验证成功'
 		}
 	}
