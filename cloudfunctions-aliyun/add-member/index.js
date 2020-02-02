@@ -337,6 +337,16 @@ var main = async (event = {}, context) => {
 		}
 	}
 
+	const currentTime = new Date().toISOString();
+
+	if (event.check_in_time) {
+		event.check_in_time = new Date(event.check_in_time).toISOString();
+	}
+	
+	if (event.body_status && event.body_status.time) {
+		event.body_status.time = new Date(event.body_status.time).toISOString();
+	}
+
 	// 测试数据
 	// event = {
 	// 	id_type: 0,
@@ -369,11 +379,11 @@ var main = async (event = {}, context) => {
 	// 		district: 0,
 	// 		street: "测试地址"
 	// 	},
-	// 	check_in_time: Date.now(),
+	// 	check_in_time: currentTime,
 	// 	// 0普通、1居家隔离、2发烧、3疑似、4确诊、5死亡， 每个状态对应的发生时间，如隔离时间、确诊时间、死亡时间
 	// 	body_status: {
 	// 		status: 0,
-	// 		time: Date.now()
+	// 		time: currentTime
 	// 	},
 	// 	// 是否接触过确诊人员、对方姓名和联系方式 {status: 0, name: "", contact: ""}, // 0没有, 1有，
 	// 	contact_virus: {
@@ -425,7 +435,7 @@ var main = async (event = {}, context) => {
 			recordInfo[key] = event[key];
 		}
 	});
-	recordInfo.create_time = Date.now();
+	recordInfo.create_time = currentTime;
 
 
 	if (!memberInfo.name) {
@@ -452,7 +462,7 @@ var main = async (event = {}, context) => {
 			member_id;
 		if (memberInDb.data && memberInDb.data.length === 0) {
 			memberUpdateResult = await memberCollection.add(Object.assign({
-				regtime: Date.now(),
+				regtime: currentTime,
 				status: 0
 			}, memberInfo));
 			member_id = memberUpdateResult.id;
@@ -470,7 +480,7 @@ var main = async (event = {}, context) => {
 		// const operateInfo = {
 		// 	member_id,
 		// 	status: 0,
-		// 	create_time: Date.now()
+		// 	create_time: currentTime
 		// }
 
 		return {
