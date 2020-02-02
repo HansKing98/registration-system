@@ -35,8 +35,11 @@
 	// #ifdef H5
 	import xlsxUtil from '@/common/xlsxUtil.js'
 	import fileSaver from 'file-saver'
+	import moment from 'moment'
 	import {
-		exportTitle
+		exportTitle,
+		bodyStatus,
+		trafficType
 	} from "@/common/name.js"
 	// #endif
 	var _this;
@@ -45,6 +48,7 @@
 			return {
 				searchKey: '',
 				list: [],
+				exportList: [],
 				page: 1,
 				loadingType: 0,
 				index: 0,
@@ -102,11 +106,10 @@
 				var startDate = '';
 				var endDate = '';
 				if (this.startDate != '') {
-					startDate = Date.parse(this.startDate);
-					endDate = Date.parse(this.endDate);
+					startDate = new Date(this.startDate).toISOString();
+					endDate = new Date(this.endDate).toISOString();
 				}
-				console.log(startDate);
-				uniCloud.callFunction({
+				this.$cloud.callFunction({
 					name: 'search',
 					data: {
 						page: this.page,
@@ -117,20 +120,27 @@
 					}
 				}).then((res) => {
 					uni.hideLoading();
-					console.log(res.result.data);
 					if (res.result.data.length == 0) {
 						this.loadingType = 2;
 						return;
 					} else {
 						var list = [];
+						var exportList = [];
 						if (_this.index == 2) {
 							res.result.data.forEach(s => {
 								list = list.concat(s.member)
-							})
+							});
+							exportList = res.result.data;
 						} else {
 							list = res.result.data;
+							res.result.data.forEach(s => {
+								exportList.push({
+									member: [s]
+								})
+							});
 						}
 						_this.list = _this.list.concat(list);
+						_this.exportList = _this.exportList.concat(exportList)
 						this.loadingType = 0;
 					}
 				}).catch((err) => {
@@ -151,21 +161,69 @@
 				_this.page = 1;
 				_this.loadingType = 0;
 				_this.list = [];
+				_this.exportList = [];
 				_this.load();
 			},
 			// #ifdef H5
 			exportTableData() {
 				let arr = [];
-				for (let data of _this.list) {
+				for (let data of _this.exportList) {
 					let info = {};
 					Object.keys(exportTitle).map((key) => {
-						if (typeof exportTitle[key] === 'object') {
-							Object.keys(exportTitle[key]).map((k) => {
-								info[exportTitle[key][k]] = data[key] && (k in data[key]) ? data[key][k] : ''
-							})
-
+						if (key in data) {
+							switch (key) {
+								case 'from_hb':
+									info[exportTitle[key]] =  data[key]== 1 ? '是' : '否'
+									break;
+								case 'from_wh':
+									info[exportTitle[key]] =  data[key] == 1 ? '是' : '否'
+									break;
+								case 'check_in_time':
+									info[exportTitle[key]] = moment(data[key]).format('YYYY-MM-DD');
+									break;
+								case 'check_out_time':
+									info[exportTitle[key]] = moment(data[key]).format('YYYY-MM-DD HH:mm:ss');
+									break;
+								case 'traffic':
+									info[exportTitle[key]['type']] = trafficType[data[key]['type']];
+									info[exportTitle[key]['car_plate']] = data[key]['car_plate'];
+									break;
+								case 'body_status':
+									info[exportTitle[key]['status']] = bodyStatus[data[key]['status']];
+									info[exportTitle[key]['time']] =  moment(data[key]['time']).format('YYYY-MM-DD HH:mm:ss');
+									break;
+								default:
+									if (typeof exportTitle[key] === 'object') {
+										if (key === 'member' && data.member && data.member.length > 0) {
+											data.member = data.member[0];
+										}
+										Object.keys(exportTitle[key]).map((k) => {
+											if (data[key] && (k in data[key])) {
+												switch (k) {
+													case 'id_type':
+														info[exportTitle[key][k]] = data[key][k] == 0 ? '身份证' : '护照';
+														break;
+													case 'sex':
+														info[exportTitle[key][k]] = data[key][k] == 0 ? '男' : '女';
+														break;
+													case 'status':
+														info[exportTitle[key][k]] = data[key][k] == 1 ? '是' : '否';
+														break;
+													default:
+														info[exportTitle[key][k]] = data[key][k];
+												}
+											} else {
+												info[exportTitle[key][k]] = '';
+											}
+									
+										})
+									} else {
+										info[exportTitle[key]] = data[key];
+									}
+							}
+							
 						} else {
-							info[exportTitle[key]] = key in data ? data[key] : ''
+							info[exportTitle[key]] = ''
 						}
 					})
 					arr.push(info)
@@ -181,7 +239,6 @@
 		onNavigationBarButtonTap(e) {
 			// #ifdef H5
 			_this.exportTableData()
-			console.log("success")
 			// #endif
 		}
 	}
