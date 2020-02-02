@@ -430,7 +430,8 @@
 						contact_virus,
 						contact_like_virus,
 						contact_like_virus_region,
-						comment
+						comment,
+						token: uni.getStorageSync('token')
 					}
 				}).then((res) => {
 					uni.hideLoading()
@@ -567,7 +568,7 @@
 		height: 1px;
 		background-color: #DDDDDD;
 	}
-	
+
 	.color-red {
 		color: #FF3333;
 	}
