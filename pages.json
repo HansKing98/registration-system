@@ -22,7 +22,9 @@
 						"buttons": [{
 							"type": "none",
 							"text": "导出",
-							"float": "right"
+							"float": "right",
+							"fontSize": "15px",
+							"fontWeight": "bold"
 						}]
 					}
 				}

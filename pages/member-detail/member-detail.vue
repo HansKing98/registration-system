@@ -31,8 +31,9 @@
 			</view>
 			<view class="xq-title">健康状况</view>
 			<view class="xq-list">
+				<view class="items">身体状况：{{ryinfo.body_status.status|bodyStatus}}</view>
 				<view class="items">体温：{{ryinfo.temperature}}</view>
-				<view class="items">检测时间：{{ryinfo.check_in_time|formatTime}}</view>
+				<view class="items">检测时间：{{ryinfo.body_status.time|formatTime}}</view>
 				<!-- <view class="items">其它症状：{{ryinfo['qtzz']}}</view> -->
 				<view class="items">是否接触确诊病人：{{ryinfo.contact_virus.status|boolean}}</view>
 				<view class="items">确诊病人姓名：{{ryinfo.contact_virus.name||'无'}}</view>
@@ -69,26 +70,36 @@
 </template>
 
 <script>
+	import {
+		trafficType,
+		bodyStatus
+	} from "@/common/name.js"
 	export default {
 		data() {
 			return {
 				ryinfo: {
+					body_status: {},
 					traffic: {},
 					contact_virus: {},
 					contact_like_virus: {},
 					contact_like_virus_region: {}
-				}
+				},
+				showxg: 1,
+				showxq: 1
 			}
 		},
 		filters: {
 			idType(val = 0) {
 				return (['身份证', '护照'])[val]
 			},
-			boolean(val = 0) {
+			boolean(val = 1) {
 				return val ? '是' : '否'
 			},
 			trafficType(val) {
-				return (['列车', '自驾车牌号', '公共汽车'])[val] || '未知'
+				return (trafficType)[val] || '未知'
+			},
+			bodyStatus(val) {
+				return (bodyStatus)[val] || '未知'
 			},
 			addres(val) {
 				return (typeof val === 'object' ? val.street : val) || '未知'
