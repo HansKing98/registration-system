@@ -14,6 +14,8 @@
 
 然后对每个云函数点右键，上传并部署到你的服务空间中。
 
+然后修改 manifes.json 中的 DCloud_AppID 为自己的，再修改 main.js 中 spaceId、clientSecret 为自己的（在 uniCloud web 控制台复制）。
+
 然后在项目根目录下，先执行`mpn i`，安装node_modules。
 
 最后，可以运行了。如果是win版，可以直接运行在内置浏览器。如果是mac版，内置浏览器也有跨域问题，需要运行到小程序模拟器或app中，或者给mac的外部浏览器安装跨域插件。
