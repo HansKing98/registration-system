@@ -109,7 +109,7 @@
 					startDate = new Date(this.startDate).toISOString();
 					endDate = new Date(this.endDate).toISOString();
 				}
-				this.$cloud.callFunction({
+				_this.$cloud.callFunction({
 					name: 'search',
 					data: {
 						page: this.page,
@@ -120,33 +120,38 @@
 					}
 				}).then((res) => {
 					uni.hideLoading();
-					if (res.result.data.length == 0) {
-						this.loadingType = 2;
-						return;
-					} else {
-						var list = [];
-						var exportList = [];
-						if (_this.index == 2) {
-							res.result.data.forEach(s => {
-								list = list.concat(s.member)
-							});
-							exportList = res.result.data;
+					if (res.result.code === 0) {
+						if (res.result.data.length == 0) {
+							this.loadingType = 2;
+							return;
 						} else {
-							list = res.result.data;
-							res.result.data.forEach(s => {
-								exportList.push({
-									member: [s]
-								})
-							});
+							var list = [];
+							var exportList = [];
+							if (_this.index == 2) {
+								res.result.data.forEach(s => {
+									list = list.concat(s.member)
+								});
+								exportList = res.result.data;
+							} else {
+								list = res.result.data;
+								res.result.data.forEach(s => {
+									exportList.push({
+										member: [s]
+									})
+								});
+							}
+							_this.list = _this.list.concat(list);
+							_this.exportList = _this.exportList.concat(exportList)
+							this.loadingType = 0;
 						}
-						_this.list = _this.list.concat(list);
-						_this.exportList = _this.exportList.concat(exportList)
-						this.loadingType = 0;
+					} else {
+						return Promise.reject(new Error(res.result.msg))
 					}
+
 				}).catch((err) => {
 					uni.hideLoading()
 					uni.showModal({
-						content: `查询失败，错误信息为：${err.message}`,
+						content: err.message || '查询失败',
 						showCancel: false
 					})
 				})
@@ -173,10 +178,10 @@
 						if (key in data) {
 							switch (key) {
 								case 'from_hb':
-									info[exportTitle[key]] =  data[key]== 1 ? '是' : '否'
+									info[exportTitle[key]] = data[key] == 1 ? '是' : '否'
 									break;
 								case 'from_wh':
-									info[exportTitle[key]] =  data[key] == 1 ? '是' : '否'
+									info[exportTitle[key]] = data[key] == 1 ? '是' : '否'
 									break;
 								case 'check_in_time':
 									info[exportTitle[key]] = moment(data[key]).format('YYYY-MM-DD');
@@ -190,7 +195,7 @@
 									break;
 								case 'body_status':
 									info[exportTitle[key]['status']] = bodyStatus[data[key]['status']];
-									info[exportTitle[key]['time']] =  moment(data[key]['time']).format('YYYY-MM-DD HH:mm:ss');
+									info[exportTitle[key]['time']] = moment(data[key]['time']).format('YYYY-MM-DD HH:mm:ss');
 									break;
 								default:
 									if (typeof exportTitle[key] === 'object') {
@@ -215,13 +220,13 @@
 											} else {
 												info[exportTitle[key][k]] = '';
 											}
-									
+
 										})
 									} else {
 										info[exportTitle[key]] = data[key];
 									}
 							}
-							
+
 						} else {
 							info[exportTitle[key]] = ''
 						}

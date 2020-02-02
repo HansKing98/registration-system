@@ -5,9 +5,9 @@
 			<view class="qiun-bg-white qiun-title-bar qiun-common-mt">
 				<view class="qiun-title-dot-light">疫情趋势图</view>
 			</view>
-				<view v-if="sign" style="text-align: center;margin-top:5px;">暂无数据</view>
+			<view v-if="sign" style="text-align: center;margin-top:5px;">暂无数据</view>
 			<view class="qiun-charts" v-else>
-				<canvas  canvas-id="canvasLineA" id="canvasLineA" class="charts" @touchstart="touchLineA"></canvas>
+				<canvas canvas-id="canvasLineA" id="canvasLineA" class="charts" @touchstart="touchLineA"></canvas>
 			</view>
 		</view>
 		<view style="margin-top: 10px;">
@@ -54,20 +54,23 @@
 				});
 				this.$cloud.callFunction({
 					name: 'chart-member-list',
-					data: {},
-					success: (res) => {
+					data: {}
+				}).then((res) => {
+					uni.hideLoading()
+					if (res.result.code === 0) {
 						if (res.result.data && res.result.data.length > 0) {
 							this.fillData(res.result.data);
 							this.sign = false;
 						}
-					},
-					fail: (err) => {
-						console.log('err', err)
-						uni.hideLoading();
-					},
-					complete: (c) => {
-						uni.hideLoading();
+					} else {
+						return Promise.reject(new Error(res.result.msg))
 					}
+				}).catch((err) => {
+					uni.hideLoading()
+					uni.showModal({
+						content: err.message || '查询失败',
+						showCancel: false
+					})
 				})
 			},
 			setColumns() {
