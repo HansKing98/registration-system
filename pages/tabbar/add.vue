@@ -16,7 +16,7 @@
 			</view>
 			<view class="list-item">
 				<text>证件号码：</text>
-				<input v-model="id_card" placeholder="请输入证件号码" type="number" />
+				<input :style="{backgroundColor: isCn ? '#EE6A50' : ''}" v-model="id_card" placeholder="请输入证件号码" type="text" />
 			</view>
 			<view class="list-item">
 				<text>年龄：</text>
@@ -229,6 +229,7 @@
 				}],
 				id_type: 0,
 				id_card: '',
+				isCn: false,
 				age: 20,
 				sex: 2,
 				phone: '',
@@ -296,6 +297,7 @@
 		methods: {
 			parseIdCard() {
 				if (this.id_type == 0) {
+					this.isCn = /[^\w\.\/]/.test(this.id_card)
 					if (this.id_card.length == 18) {
 						let year = parseInt(this.id_card.substr(6, 4));
 						let mark = parseInt(this.id_card.substr(16, 1));
