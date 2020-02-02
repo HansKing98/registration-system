@@ -319,10 +319,10 @@
 				this.sex = e.detail.value
 			},
 			fromHbChange(e) {
-				this.sex = e.detail.value
+				this.from_hb = e.detail.value
 			},
 			fromWhChange(e) {
-				this.sex = e.detail.value
+				this.from_wh = e.detail.value
 			},
 			trafficTypeChange(e) {
 				this.traffic.type = e.detail.value
