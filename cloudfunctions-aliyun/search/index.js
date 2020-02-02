@@ -18,8 +18,8 @@ exports.main = async (event, context) => {
 			check_in_time:dbCmd.gte(event.startDate).and(dbCmd.lte(event.endDate)),
 		}).lookup({
 		    from: 'member',
-		    localField: 'id_card',
-		    foreignField: 'id_card',
+		    localField: 'member_id',
+		    foreignField: '_id',
 		    as: 'member',
 		  }).end();
 		  return res;
