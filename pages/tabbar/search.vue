@@ -21,7 +21,7 @@
 
 		</view>
 		<uni-list>
-			<uni-list-item v-for="(item,index) in list" :key="index" @click="openDetail(item)" :title="item.name" :note="item.address"></uni-list-item>
+			<uni-list-item v-for="(item,index) in list" :key="index" @click="openDetail(item._id)" :title="item.name" :note="item.address"></uni-list-item>
 		</uni-list>
 		<view class="uni-flex" style="justify-content: center;padding: 10upx;">
 			{{contentText[loadingType]}}
@@ -68,6 +68,7 @@
 			_this = this;
 		},
 		onShow() {
+
 			this.reload();
 		},
 		onReachBottom() {
@@ -98,12 +99,19 @@
 			},
 			load: function() {
 				uni.showLoading();
-				this.$cloud.callFunction({
+				var startDate = '';
+				var endDate = '';
+				if (this.startDate != '') {
+					startDate = Date.parse(this.startDate);
+					endDate = Date.parse(this.endDate);
+				}
+				console.log(startDate);
+				uniCloud.callFunction({
 					name: 'search',
 					data: {
 						page: this.page,
-						startDate: this.startDate,
-						endDate: this.endDate,
+						startDate: startDate,
+						endDate: endDate,
 						searchKey: this.searchKey,
 						pageSize: 10
 					}
@@ -114,7 +122,15 @@
 						this.loadingType = 2;
 						return;
 					} else {
-						_this.list = _this.list.concat(res.result.data);
+						var list = [];
+						if (_this.index == 2) {
+							res.result.data.forEach(s => {
+								list = list.concat(s.member)
+							})
+						} else {
+							list = res.result.data;
+						}
+						_this.list = _this.list.concat(list);
 						this.loadingType = 0;
 					}
 				}).catch((err) => {
@@ -126,9 +142,9 @@
 				})
 
 			},
-			openDetail: function(item) {
+			openDetail: function(id) {
 				uni.navigateTo({
-					url: `../member-detail/member-detail?item=${encodeURIComponent(JSON.stringify(item))}`
+					url: '../member-detail/member-detail?id=' + id
 				})
 			},
 			reload: function() {
@@ -167,7 +183,7 @@
 			_this.exportTableData()
 			console.log("success")
 			// #endif
-		},
+		}
 	}
 </script>
 
