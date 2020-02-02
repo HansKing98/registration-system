@@ -1,137 +1,175 @@
 //我在做这个文件，我的群昵称是AHello
 <template>
-	<view>
-		<!-- <view class="tag">
+  <view>
+    <!-- <view class="tag">
 			<uni-tag style="margin: 5upx 5upx;" v-for="(item,index) in tags" :key="index" @click="tagQuery(index)" :text="item.text"
 			 :type="item.type"></uni-tag>
-		</view> -->
-		<view v-if="!members.length" class="none">
-			暂无数据
-		</view>
-		<view class="flex-item flex-item-V uni-bg-blue">
-			<uni-list>
-				<uni-list-item v-for="(item,index) in members" :key="index" @click="openDetail(item)" :title="item.name" :note="item.address||'地址未填写'"></uni-list-item>
-			</uni-list>
-		</view>
-	</view>
+    </view>-->
+    <view v-if="!members.length" class="none">暂无数据</view>
+    <view class="flex-item flex-item-V uni-bg-blue">
+      <uni-list>
+        <uni-list-item
+          v-for="(item,index) in members"
+          :key="index"
+          @click="openDetail(item)"
+          :title="item.isDanger ? `${item.name}(危险访客)` : item.name"
+          :note="item.address||'地址未填写'"
+        ></uni-list-item>
+      </uni-list>
+    </view>
+  </view>
 </template>
 
 <script>
-	import uniList from "@/components/uni-list/uni-list.vue"
-	import uniListItem from "@/components/uni-list-item/uni-list-item.vue"
-	import uniTag from "@/components/uni-tag/uni-tag.vue"
-	export default {
-		components: {
-			uniList,
-			uniListItem,
-			uniTag
-		},
-		data() {
-			return {
-				members: [],
-				page: 0,
-				// tags: [{
-				// 		"text": "所有",
-				// 		"type": "default"
-				// 	},
-				// 	{
-				// 		"text": "普通",
-				// 		"type": "primary"
-				// 	},
-				// 	{
-				// 		"text": "隔离",
-				// 		"type": "success"
-				// 	},
-				// 	{
-				// 		"text": "发烧",
-				// 		"type": "success"
-				// 	},
-				// 	{
-				// 		"text": "疑似",
-				// 		"type": "success"
-				// 	},
-				// 	{
-				// 		"text": "确诊",
-				// 		"type": "warning"
-				// 	},
-				// 	{
-				// 		"text": "死亡",
-				// 		"type": "error"
-				// 	}
-				// ]
-			}
-		},
-		onLoad() {
-			this.loadData();
-		},
-		onPullDownRefresh() {
-			this.members = []
-			this.page = 0
-			this.loadData()
-		},
-		onReachBottom() {
-			this.loadData()
-		},
-		methods: {
-			loadData() {
-				uni.showLoading({
-					title: "加载中..."
-				});
+import uniList from "@/components/uni-list/uni-list.vue";
+import uniListItem from "@/components/uni-list-item/uni-list-item.vue";
+import uniTag from "@/components/uni-tag/uni-tag.vue";
+export default {
+  components: {
+    uniList,
+    uniListItem,
+    uniTag
+  },
+  data() {
+    return {
+      members: [],
+      page: 0,
+      data: []
+      // tags: [{
+      // 		"text": "所有",
+      // 		"type": "default"
+      // 	},
+      // 	{
+      // 		"text": "普通",
+      // 		"type": "primary"
+      // 	},
+      // 	{
+      // 		"text": "隔离",
+      // 		"type": "success"
+      // 	},
+      // 	{
+      // 		"text": "发烧",
+      // 		"type": "success"
+      // 	},
+      // 	{
+      // 		"text": "疑似",
+      // 		"type": "success"
+      // 	},
+      // 	{
+      // 		"text": "确诊",
+      // 		"type": "warning"
+      // 	},
+      // 	{
+      // 		"text": "死亡",
+      // 		"type": "error"
+      // 	}
+      // ]
+    };
+  },
+  onLoad() {
+    this.loadData();
+  },
+  onPullDownRefresh() {
+    this.members = [];
+    this.page = 0;
+    this.loadData();
+  },
+  onReachBottom() {
+    this.loadData();
+  },
+  methods: {
+    loadData() {
+      uni.showLoading({
+        title: "加载中..."
+      });
 
-				this.$cloud.callFunction({
-					name: 'member-list',
-					data: {
-						page: this.page,
-						length: 15
-					}
-				}).then(({
-					result
-				}) => {
-					uni.hideLoading()
-					uni.stopPullDownRefresh()
-					console.log(result)
-					if (result.code !== 0) {
-						uni.showToast({
-							icon: 'none',
-							title: result.msg
-						})
-						return
-					}
-					this.page++
-					this.members.push(...result.data)
-				}).catch(err => {
-					uni.hideLoading()
-					uni.stopPullDownRefresh()
-					uni.showToast({
-						icon: 'none',
-						title: '数据加载失败'
-					})
-				})
-			},
-			//明细
-			openDetail: function(item) {
-				console.log(item)
-				uni.navigateTo({
-					url: `../member-detail/member-detail?item=${encodeURIComponent(JSON.stringify(item))}`
-				})
-			},
-			//标签搜索
-			tagQuery: function(e) {}
-		}
-	}
+      this.$cloud
+        .callFunction({
+          name: "member-list",
+          data: {
+            page: this.page,
+            length: 15
+          }
+        })
+        .then(({ result }) => {
+          uni.hideLoading();
+          uni.stopPullDownRefresh();
+          if (result.code !== 0) {
+            uni.showToast({
+              icon: "none",
+              title: result.msg
+            });
+            return;
+          }
+          this.page++;
+          this.members.push(...result.data);
+          // 检查是否是黑名单
+          this.members.forEach((v, i) => {
+            this.$cloud
+              .callFunction({
+                name: "member-detail",
+                data: {
+                  id: v._id
+                }
+              })
+              .then(async rsp => {
+                if (this.data.length === 0) {
+                  // 获取第三方库数据
+                  const getData = await this.$cloud.callFunction({
+                    name: "get-data",
+                    data: {}
+                  });
+                  this.data = getData.result.data || [];
+                }
+                if (this.data.length > 0) {
+                  const findData = this.data.find(v => {
+                    return (
+                      v.t_no.includes(rsp.result.data.traffic.car_plate) &&
+                      v.t_date.includes(rsp.result.data.check_in_time || "")
+                    );
+                  });
+                  v.isDanger = findData && !!findData.t_no_sub;
+                  this.members[i] = v;
+                  this.$set(this.members, i, v);
+                }
+              });
+          });
+        })
+        .catch(err => {
+          uni.hideLoading();
+          uni.stopPullDownRefresh();
+          uni.showToast({
+            icon: "none",
+            title: "数据加载失败"
+          });
+        });
+    },
+    //明细
+    openDetail: function(item) {
+      console.log(item);
+      uni.navigateTo({
+        url: `../member-detail/member-detail?item=${encodeURIComponent(
+          JSON.stringify(item)
+        )}`
+      });
+    },
+    //标签搜索
+    tagQuery: function(e) {}
+  }
+};
 </script>
 
 <style>
-	.tag {
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-		padding: 10px 10px;
-	}
+.tag {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 10px 10px;
+}
 
-	.none {
-		text-align: center;
-		color: #CCCCCC;
-		line-height: 100px;
-	}
+.none {
+  text-align: center;
+  color: #cccccc;
+  line-height: 100px;
+}
 </style>

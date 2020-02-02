@@ -108,8 +108,10 @@
 			item
 		} = {}) {
 			try {
-				Object.assign(this.ryinfo, JSON.parse(decodeURIComponent(item)))
-				this.loadData(this.ryinfo._id)
+				const ryinfo = Object.assign(this.ryinfo, JSON.parse(decodeURIComponent(item)))
+				if (!ryinfo.list_id) {
+					this.loadData(ryinfo._id)
+				}
 			} catch (e) {
 				console.error(e)
 			}
