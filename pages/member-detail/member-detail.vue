@@ -137,6 +137,18 @@
 				}) => {
 					uni.hideLoading()
 					console.log(result)
+                    if (result.code === -3) {// 登陆无效
+                      uni.showModal({
+                        content: "登陆状态无效",
+                        showCancel: false,
+                        complete: () => {
+                          uni.redirectTo({
+                              url:"/pages/login/login"
+                          })
+                        }
+                      })
+                      return;
+                    }
 					if (result.code !== 0) {
 						uni.showToast({
 							icon: 'none',
