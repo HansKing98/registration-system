@@ -33,7 +33,7 @@
 
 **注意**
 
-- 实际部署时切记更换`cloudfunctions-module/src/utils/constants.js`内的`passSecret`，更换之后重新导入操作员信息
+- 实际部署时切记更换`cloudfunctions-module/src/utils/constants.js`内的`passSecret`，更换之后重新编译云函数，导入操作员信息
 
 ## 人员信息字段
 
