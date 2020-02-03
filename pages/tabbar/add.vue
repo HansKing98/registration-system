@@ -488,6 +488,16 @@
 							content: '信息上传完成，请勿重复提交',
 							showCancel: false
 						})
+					} else if (res.result.errCode === 'TOKEN_INVALID') {
+						uni.showModal({
+							content: '登录状态无效，请重新登录',
+							showCancel: false,
+							success() {
+								uni.redirectTo({
+									url: '/pages/login/login'
+								})
+							}
+						})
 					} else {
 						return Promise.reject(new Error(res.result.msg))
 					}

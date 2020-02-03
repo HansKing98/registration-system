@@ -246,65 +246,145 @@ var encryptPassword_1 = {
 	encryptPassword
 };
 
+const db = uniCloud.database();
+async function validateToken(token) {
+	const userFromToken = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+	const userInDB = await db.collection('user').where(userFromToken).get();
+	if (userInDB.data.length !== 1) {
+		return {
+			code: -1,
+			errCode: 'TOKEN_INVALID',
+			msg: '查无此人'
+		}
+	}
+	const userInfoDB = userInDB.data[0];
+	let userInfoDecode;
+
+	userInfoDecode = jwtSimple.decode(token, userInfoDB.tokenSecret);
+
+	function checkUser(userFromToken, userInfoDB) {
+		return Object.keys(userFromToken).every(function(item) {
+			return userFromToken[item] === userInfoDB[item] && userFromToken[item] === userInfoDecode[item]
+		})
+	}
+
+
+	if (userInfoDB.exp > Date.now() && checkUser(userFromToken, userInfoDB)) {
+		return {
+			code: 0,
+			username: userInfoDB.username,
+			msg: 'token验证成功'
+		}
+	}
+
+	if (userInfoDB.exp < Date.now()) {
+		return {
+			code: -3,
+			errCode: 'TOKEN_EXPIRED',
+			msg: 'token已失效'
+		}
+	}
+
+	return {
+		code: -2,
+		errCode: 'TOKEN_INVALID',
+		msg: 'token无效'
+	}
+
+}
+
+var validateToken_1 = {
+	validateToken
+};
+
 const {
 	tokenExp: tokenExp$1
 } = constants;
 const {
 	encryptPassword: encryptPassword$1
 } = encryptPassword_1;
+const {
+	validateToken: validateToken$1
+} = validateToken_1;
 
-const db = uniCloud.database();
+const db$1 = uniCloud.database();
+var main = async (event = {}, context) => {
+	let validateResult;
+	try {
+		validateResult = await validateToken$1(event.token);
+	} catch (e) {
+		//TODO handle the exception
+		return {
+			code: -1,
+			errCode: 'TOKEN_INVALID',
+			msg: '登录状态无效，请重新登录'
+		}
+	}
 
-async function login(event) {
+	if (validateResult.code !== 0) {
+		return {
+			code: -1,
+			errCode: 'TOKEN_INVALID',
+			msg: '登录状态无效，请重新登录'
+		}
+	}
+	const username = validateResult.username;
+
 	const {
-		username,
-		password
+		oldPwd,
+		newPwd
 	} = event;
 	
 	let userInfo = {
 		username
 	};
 
-	const userInDB = await db.collection('user').where({
+	if (!oldPwd || !newPwd || newPwd.length < 6) {
+		return {
+			code: -2,
+			msg: '参数不正确'
+		}
+	}
+	
+	const userInDB = await db$1.collection('user').where({
 		username,
-		password: encryptPassword$1(password)
+		password: encryptPassword$1(oldPwd)
 	}).get();
-
+	
 	let tokenSecret = crypto.randomBytes(16).toString('hex'),
 		token = jwtSimple.encode(userInfo, tokenSecret);
 	let userUpdateResult;
 	if (userInDB.data && userInDB.data.length === 0) {
 		return {
-			code: -1,
-			msg: '用户名或密码不正确'
+			code: -3,
+			msg: '旧密码不正确'
 		}
 	} else {
-		userUpdateResult = await db.collection('user').doc(userInDB.data[0]._id).update({
+		userUpdateResult = await db$1.collection('user').doc(userInDB.data[0]._id).update({
+			password: encryptPassword$1(newPwd),
 			tokenSecret,
 			exp: Date.now() + tokenExp$1
 		});
 	}
-
+	
 	if (userUpdateResult.id || userUpdateResult.affectedDocs === 1) {
 		return {
 			code: 0,
 			token,
 			username,
-			msg: '登录成功'
+			msg: '密码修改成功'
 		}
 	}
-
+	
 	return {
-		code: -1,
-		msg: '登录失败'
+		code: -4,
+		msg: '密码修改失败'
 	}
-}
+};
 
-var main = login;
-
-var login_1 = {
+var changePwd = {
 	main: main
 };
 
-exports.default = login_1;
+exports.default = changePwd;
 exports.main = main;

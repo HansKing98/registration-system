@@ -35,12 +35,6 @@
 			"style": {}
 		},
 		{
-			"path": "pages/tabbar/change-pwd",
-			"style": {
-				"navigationBarTitleText": "设置密码"
-			}
-		},
-		{
 			"path": "pages/login/login",
 			"style": {}
 		},
@@ -55,6 +49,11 @@
 		{
 			"path": "pages/chart/chart",
 			"style": {}
+		}, {
+			"path": "pages/change-pwd/change-pwd",
+			"style": {
+				"navigationBarTitleText": "设置密码"
+			}
 		}
 	],
 	"globalStyle": {
