@@ -126,7 +126,7 @@ export default {
                 if (this.data.length > 0) {
                   const findData = this.data.find(v => {
                     return (
-                      v.t_no.includes(rsp.result.data.traffic.car_plate) &&
+                      (v.t_no).toUpperCase().includes((rsp.result.data.traffic.car_plate).toUpperCase()) &&
                       v.t_date.includes(rsp.result.data.check_in_time || "")
                     );
                   });
