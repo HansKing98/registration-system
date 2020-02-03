@@ -73,12 +73,12 @@
 				"selectedIconPath": "static/tab-icon/list-on.png",
 				"text": "列表"
 			},
-			{
-				"pagePath": "pages/chart/chart",
-				"iconPath": "static/tab-icon/chart.png",
-				"selectedIconPath": "static/tab-icon/chart-on.png",
-				"text": "图表"
-			},
+			// {
+			// 	"pagePath": "pages/chart/chart",
+			// 	"iconPath": "static/tab-icon/chart.png",
+			// 	"selectedIconPath": "static/tab-icon/chart-on.png",
+			// 	"text": "图表"
+			// },
 			{
 				"pagePath": "pages/tabbar/add",
 				"iconPath": "static/tab-icon/plus.png",
