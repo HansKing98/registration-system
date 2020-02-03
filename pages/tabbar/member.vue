@@ -12,8 +12,8 @@
           v-for="(item,index) in members"
           :key="index"
           @click="openDetail(item)"
-          :color="item.isDanger ? 'red':''"
-          :title="item.isDanger ? `${item.name}(感染者同程)` : item.name"
+          :color="item.is_danger ? 'red':''"
+          :title="item.is_danger ? `${item.name}(感染者同程)` : item.name"
           :note="item.address||'地址未填写'"
         ></uni-list-item>
       </uni-list>
@@ -96,16 +96,17 @@ export default {
         .then(({ result }) => {
           uni.hideLoading();
           uni.stopPullDownRefresh();
-          if (result.code === -3) {// 登陆无效
+          if (result.code === -3) {
+            // 登陆无效
             uni.showModal({
               content: "登陆状态无效",
               showCancel: false,
               complete: () => {
                 uni.redirectTo({
-                    url:"/pages/login/login"
-                })
+                  url: "/pages/login/login"
+                });
               }
-            })
+            });
             return;
           }
           if (result.code !== 0) {
@@ -117,8 +118,9 @@ export default {
           }
           this.page++;
           this.members.push(...result.data);
-          // 检查是否是黑名单
+          // 二次检测是否是感染者
           this.members.forEach(async (v, i) => {
+            if (v.is_danger) return;
             if (this.data.length === 0) {
               // 获取第三方库数据
               const getData = await this.$cloud.callFunction({
@@ -127,7 +129,11 @@ export default {
               });
               this.data = getData.result.data || [];
             }
-            if (this.data.length > 0 && v.traffic.car_plate && v.check_in_time) {
+            if (
+              this.data.length > 0 &&
+              v.traffic.car_plate &&
+              v.check_in_time
+            ) {
               const findData = this.data.find(val => {
                 return (
                   val.t_no
@@ -136,7 +142,7 @@ export default {
                   val.t_date.includes(v.check_in_time.substring(0, 10) || "")
                 );
               });
-              v.isDanger = !!findData;
+              v.is_danger = !!findData;
               // this.members[i] = v;
               this.$set(this.members, i, v);
             }

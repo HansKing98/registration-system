@@ -4,7 +4,7 @@
 <template>
 	<view>
 		<uni-list>
-			<uni-list-item :title="this.username" show-arrow="false" thumb="/static/font/user.png"></uni-list-item>
+			<uni-list-item :title="username" show-arrow="false" thumb="/static/font/user.png"></uni-list-item>
 			<uni-list-item title="修改密码" thumb="/static/font/pwd.png" @click="modifyPwd()"></uni-list-item>
 			<!-- <uni-list-item title="关于" thumb="/static/font/about.png" @click="aboutUs()"></uni-list-item> -->
 			<uni-list-item title="切换账号/退出" thumb="/static/font/exit.png" @click="exit()"></uni-list-item>
