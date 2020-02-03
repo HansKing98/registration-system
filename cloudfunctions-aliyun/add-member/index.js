@@ -284,7 +284,7 @@ const defaultMemberInfo = {
 	id_card: '',
 	name: '',
 	phone: '',
-	age: '',
+	age: 0,
 	province: '',
 	city: '',
 	area: '',

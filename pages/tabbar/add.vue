@@ -257,7 +257,7 @@
 				id_type: 0,
 				id_card: '',
 				isCn: false,
-				age: 20,
+				age: 0,
 				sex: 2,
 				native: 2,
 				phone: '',

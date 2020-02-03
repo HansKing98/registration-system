@@ -16,7 +16,7 @@
 				<view class="items">姓名：{{ryinfo['name']}}</view>
 				<view class="items">性别：{{ryinfo.sex|sex}}</view>
 				<view class="items">是否本地户籍：{{ryinfo.native|boolean}}</view>
-				<view class="items">年龄：{{ryinfo['age']}}岁</view>
+				<view class="items">年龄：{{ryinfo.age|age}}</view>
 				<view class="items">证件类型：{{ryinfo.id_type|idType}}</view>
 				<view class="items">证件号码：{{ryinfo.id_card||'未知'}}</view>
 				<view class="items">联系电话：{{ryinfo.phone}}</view>
@@ -97,6 +97,9 @@
 			}
 		},
 		filters: {
+			age(val) {
+				return val ? `${val}岁` : '未知'
+			},
 			idType(val) {
 				return (['身份证', '护照'])[val] || '未知'
 			},
