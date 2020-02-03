@@ -16,7 +16,7 @@
 				<view class="items">姓名：{{ryinfo['name']}}</view>
 				<view class="items">性别：{{ryinfo.sex|sex}}</view>
 				<view class="items">是否本地户籍：{{ryinfo.native|boolean}}</view>
-				<view class="items">年龄：{{ryinfo['age']}}岁</view>
+				<view class="items">年龄：{{ryinfo.age|age}}</view>
 				<view class="items">证件类型：{{ryinfo.id_type|idType}}</view>
 				<view class="items">证件号码：{{ryinfo.id_card||'未知'}}</view>
 				<view class="items">联系电话：{{ryinfo.phone}}</view>
@@ -38,11 +38,11 @@
 			</view>
 			<view class="xq-title">健康状况</view>
 			<view class="xq-list">
-				<view class="items">身体状况：{{ryinfo.body_status.status|bodyStatus}}</view>
+				<!-- <view class="items">身体状况：{{ryinfo.body_status.status|bodyStatus}}</view> -->
 				<view class="items">体温：{{ryinfo.temperature}}</view>
-				<view class="items">检测时间：{{ryinfo.body_status.time|formatTime}}</view>
+				<!-- <view class="items">检测时间：{{ryinfo.body_status.time|formatTime}}</view> -->
 				<!-- <view class="items">其它症状：{{ryinfo['qtzz']}}</view> -->
-				<view class="items">是否接触确诊病人：{{ryinfo.contact_virus.status|boolean}}</view>
+				<!-- <view class="items">是否接触确诊病人：{{ryinfo.contact_virus.status|boolean}}</view>
 				<view class="items">确诊病人姓名：{{ryinfo.contact_virus.name||'无'}}</view>
 				<view class="items">确诊病人电话：{{ryinfo.contact_virus.contact||'无'}}</view>
 				<view class="items">是否接触疑似病人：{{ryinfo.contact_like_virus.status|boolean}}</view>
@@ -50,7 +50,7 @@
 				<view class="items">疑似病人电话：{{ryinfo.contact_like_virus.contact||'无'}}</view>
 				<view class="items">是否接来自疫区人员：{{ryinfo.contact_like_virus_region.status|boolean}}</view>
 				<view class="items">来自疫区人员姓名：{{ryinfo.contact_like_virus_region.name||'无'}}</view>
-				<view class="items">来自疫区人员电话：{{ryinfo.contact_like_virus_region.contact||'无'}}</view>
+				<view class="items">来自疫区人员电话：{{ryinfo.contact_like_virus_region.contact||'无'}}</view> -->
 			</view>
 			<!-- <view style="width:700upx;margin:auto;text-align:center;margin-top:20upx;padding-top:20upx;border-top:#cccccc 1upx solid;float: left;margin-bottom:40upx;"><button
 				 type="primary" style="width:340upx;float:left;">编辑信息</button><button type="warn" style="width:340upx;margin-left:0upx;float:right"
@@ -97,6 +97,9 @@
 			}
 		},
 		filters: {
+			age(val) {
+				return val ? `${val}岁` : '未知'
+			},
 			idType(val) {
 				return (['身份证', '护照'])[val] || '未知'
 			},
@@ -144,6 +147,7 @@
 				this.$cloud.callFunction({
 					name: 'member-detail',
 					data: {
+						token: uni.getStorageSync('token'),
 						id
 					}
 				}).then(({

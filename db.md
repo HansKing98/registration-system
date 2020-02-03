@@ -78,7 +78,7 @@ member_check_in_address
   _id: "", // string，自生成
   id_card: 0, // 关联身份证ID
   id_member: 0, //关联新增成员登记ID
-  age: 18, // int
+  age: 0, // int// 缺省为0
   sex: 0, // int (0女, 1男, 2未知)
   xm_name:0,//姓名--搜索
   in_country: 0, //登记地_搜索国家

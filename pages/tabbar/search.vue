@@ -112,6 +112,7 @@
 				_this.$cloud.callFunction({
 					name: 'search',
 					data: {
+						token: uni.getStorageSync('token'),
 						page: this.page,
 						startDate: startDate,
 						endDate: endDate,

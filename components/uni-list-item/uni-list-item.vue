@@ -12,7 +12,7 @@
 				</view>
 				<view class="uni-list-item__content">
 					<slot />
-					<text class="uni-list-item__content-title">{{ title }}</text>
+					<text :style="{color: color}" class="uni-list-item__content-title">{{ title }}</text>
 					<text v-if="note" class="uni-list-item__content-note">{{ note }}</text>
 				</view>
 				<view v-if="showBadge || showArrow || showSwitch" class="uni-list-item__extra">
@@ -60,6 +60,9 @@
 			uniBadge
 		},
 		props: {
+			color: {
+				type: String,
+			},
 			title: {
 				type: String,
 				default: ''

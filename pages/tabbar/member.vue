@@ -12,7 +12,8 @@
           v-for="(item,index) in members"
           :key="index"
           @click="openDetail(item)"
-          :title="item.isDanger ? `${item.name}(危险访客)` : item.name"
+          :color="item.isDanger ? 'red':''"
+          :title="item.isDanger ? `${item.name}(感染者同程)` : item.name"
           :note="item.address||'地址未填写'"
         ></uni-list-item>
       </uni-list>
@@ -109,6 +110,7 @@ export default {
               .callFunction({
                 name: "member-detail",
                 data: {
+                  token: uni.getStorageSync("token"),
                   id: v._id
                 }
               })
@@ -124,12 +126,12 @@ export default {
                 if (this.data.length > 0) {
                   const findData = this.data.find(v => {
                     return (
-                      v.t_no.includes(rsp.result.data.traffic.car_plate) &&
+                      (v.t_no).toUpperCase().includes((rsp.result.data.traffic.car_plate).toUpperCase()) &&
                       v.t_date.includes(rsp.result.data.check_in_time || "")
                     );
                   });
                   v.isDanger = findData && !!findData.t_no_sub;
-                  this.members[i] = v;
+                  // this.members[i] = v;
                   this.$set(this.members, i, v);
                 }
               });
