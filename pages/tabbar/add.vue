@@ -110,6 +110,7 @@
 				<text>记录体温：</text>
 				<slider value="36.5" @change="temperatureChange" min="35" step="0.1" max="40" show-value />
 			</view>
+			<button @click="submit">提交信息</button>
 		</view>
 		<mpvue-city-picker ref="mpvueCityPicker" :pickerValueDefault="cityPickerValueDefault" @onConfirm="onCityConfirm"></mpvue-city-picker>
 	</view>
