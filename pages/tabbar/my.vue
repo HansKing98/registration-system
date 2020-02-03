@@ -46,7 +46,7 @@
 			//修改密码
 			modifyPwd() {
 				uni.navigateTo({
-					url: 'change-pwd'
+					url: '/pages/change-pwd/change-pwd'
 				})
 			},
 			//关于我们

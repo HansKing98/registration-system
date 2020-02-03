@@ -290,7 +290,6 @@ const defaultMemberInfo = {
 	area: '',
 	address: '',
 	sex: 2,
-	native: 2,
 	regtime: ''
 };
 
@@ -313,7 +312,6 @@ const defaultRecordInfo = {
 	contact_virus: null,
 	contact_like_virus: null,
 	contact_like_virus_region: null,
-	access: null,
 	comment: '',
 	create_time: 0
 };
