@@ -37,7 +37,7 @@
 			}
 		},
 		onLoad() {
-			let ewmurl = "http://sfwy-wlry.m3w.cn/#/pages/index/add?id=" + this.username;
+			let ewmurl = `${location.protocol}//${location.host}/#/pages/index/add?id=${this.username}`;
 			this.ewm = QR.createQrCodeImg(ewmurl, {
 				size: 350
 			});
