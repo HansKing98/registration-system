@@ -282,6 +282,7 @@ const db$1 = uniCloud.database();
 const defaultMemberInfo = {
 	id_type: '',
 	id_card: '',
+	plate_number: '',
 	name: '',
 	phone: '',
 	age: 0,

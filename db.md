@@ -52,6 +52,7 @@ member_list
 {
 	_id: "", // string，自生成
 	id_card: 0, // 关联身份证ID
+	plate_number: '', //车牌号
 	status: 0, // 0正常, 1删除
 	from_address: {country: 0, province: 0, city: 0, district: 0, street: ""}, // 来自地区
 	from_hb: 0, // 默认0，没有来之湖北

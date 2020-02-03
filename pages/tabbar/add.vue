@@ -5,7 +5,7 @@
 			<view class="list-title">人员信息</view>
 			<view class="list-item">
 				<text>姓名<text class="color-red">*</text>：</text><input v-model="name" value="" placeholder="请输入人员姓名" /></view>
-			<view class="list-item">
+			<!-- <view class="list-item">
 				<text>证件类型：</text>
 				<picker mode="selector" range-key="label" :range="idTypeList" @change="idTypeChange">
 					<view class="xiala">
@@ -13,23 +13,18 @@
 						<image src="/static/xl.png"></image>
 					</view>
 				</picker>
-			</view>
+			</view> -->
 			<view class="list-item">
-				<text>证件号码：</text>
+				<text>身份证号<text class="color-red">*</text>：</text>
 				<input :style="{backgroundColor: isCn ? '#EE6A50' : ''}" v-model="id_card" placeholder="请输入证件号码" type="text" />
 			</view>
 			<view class="list-item">
-				<text>年龄：</text>
-				<slider :value="age" min="0" step="1" max="120" show-value @change="ageChange" />
+				<text>车牌号<text class="color-red">*</text>：</text>
+				<input :style="{backgroundColor: isCn ? '#EE6A50' : ''}" v-model="plate_number" placeholder="请输入车牌号" type="text" />
 			</view>
 			<view class="list-item">
-				<text>性别： </text>
-				<radio-group @change="sexChange">
-					<label>
-						<radio value="1" :checked="sex=='1'" /><text>男</text>
-						<radio value="0" :checked="sex=='0'" /><text>女</text>
-					</label>
-				</radio-group>
+				<text>联系电话<text class="color-red">*</text>： </text>
+				<input v-model="phone" value="" placeholder="请输入联系电话" />
 			</view>
 			<view class="list-item">
 				<text>是否本地户籍： </text>
@@ -41,31 +36,6 @@
 				</radio-group>
 			</view>
 			<view class="list-item">
-				<text>联系电话<text class="color-red">*</text>： </text>
-				<input v-model="phone" value="" placeholder="请输入联系电话" />
-			</view>
-		</view>
-		<view class="list">
-			<view class="list-title">到访信息</view>
-			<!-- <view class="list-item">
-				<text>到访单位<text class="color-red">*</text>：</text><input v-model="" placeholder="请输单位名称" />
-			</view> -->
-			<view class="list-item">
-				<text>本单位联系人：</text>
-				<input v-model="access.name" placeholder="请输入联系人姓名" />
-			</view>
-			<view class="list-item">
-				<text>联系人电话： </text>
-				<input v-model="access.phone" placeholder="请输入联系电话" />
-			</view>
-			<view class="list-item">
-				<text>到访事由：</text>
-				<input v-model="access.comment" placeholder="请输入到访事由" />
-			</view>
-		</view>
-		<view class="list">
-			<view class="list-title">来源地信息</view>
-			<view class="list-item">
 				<text>是否来自湖北： </text>
 				<radio-group @change="fromHbChange">
 					<label>
@@ -74,7 +44,7 @@
 					</label>
 				</radio-group>
 			</view>
-			<view class="list-item">
+			<!-- <view class="list-item">
 				<text>是否来自武汉： </text>
 				<radio-group @change="fromWhChange">
 					<label>
@@ -82,17 +52,17 @@
 						<radio value="0" /><text>否</text>
 					</label>
 				</radio-group>
-			</view>
+			</view> -->
 			<view class="list-item">
-				<text>来源地区：</text>
+				<text>来源地区<text class="color-red">*</text>：</text>
 				<input @click="showCityPicker('from_address')" disabled="disabled" placeholder="请输入地址" :value="from_address.addressStr" />
 			</view>
-			<view class="list-item">
+			<!-- <view class="list-item">
 				<text>来源地详细地址： </text>
 				<input v-model="from_address.street" placeholder="请输入地址" />
-			</view>
+			</view> -->
 			<view class="list-item">
-				<text>出行方式：</text>
+				<text>春运出行方式：</text>
 				<radio-group @change="trafficTypeChange">
 					<label>
 						<radio value="0" /><text>火车</text>
@@ -113,125 +83,33 @@
 				<input v-model="traffic.car_plate" placeholder="请务必输入正确的信息" />
 			</view>
 			<view class="list-item">
-				<text>到访地区：</text>
-				<input @click="showCityPicker('check_in_address')" disabled="disabled" placeholder="请输入地址" :value="check_in_address.addressStr" />
-			</view>
-			<view class="list-item">
-				<text>到访地详细地址： </text>
-				<input v-model="check_in_address.street" placeholder="请输入地址" />
-			</view>
-			<view class="list-item">
-				<text>到达日期： </text>
+				<text>春运日期： </text>
 				<picker mode="date" @change="checkInTimeChange">
 					<button size="mini">{{checkInTimeStr||'请选择'}}</button>
 				</picker>
 			</view>
 		</view>
 		<view class="list">
-			<view class="list-title">健康状况</view>
+			<view class="list-title">到访信息</view>
 			<!-- <view class="list-item">
-				<text>身体状况：</text>
-				<radio-group @change="bodyStatusChange">
-					<label>
-						<radio value="0" /><text>普通</text>
-					</label>
-					<label>
-						<radio value="1" /><text>居家隔离</text>
-					</label>
-					<label>
-						<radio value="2" /><text>发烧</text>
-					</label>
-					<label>
-						<radio value="3" /><text>疑似</text>
-					</label>
-					<label>
-						<radio value="4" /><text>确诊</text>
-					</label>
-					<label>
-						<radio value="5" /><text>死亡</text>
-					</label>
-				</radio-group>
+				<text>到访单位<text class="color-red">*</text>：</text><input v-model="" placeholder="请输单位名称" />
+			</view> -->
+			<view class="list-item">
+				<text>本单位联系人：</text>
+				<input v-model="access.name" placeholder="请输入联系人姓名" />
 			</view>
 			<view class="list-item">
-				<text>记录时间：</text>
-				<picker mode="date" @change="bodyStatusDateChange">
-					<button size="mini">{{bodyStatusDate||'请选择日期'}}</button>
-				</picker>
-				<picker mode="time" @change="bodyStatusTimeChange">
-					<button size="mini">{{bodyStatusTime||'请选择时间'}}</button>
-				</picker>
+				<text>联系人电话： </text>
+				<input v-model="access.phone" placeholder="请输入联系电话" />
 			</view>
-			<view class="divider"></view> -->
 			<view class="list-item">
-				<text>体温：</text>
+				<text>到访事由：</text>
+				<input v-model="access.comment" placeholder="请输入到访事由" />
+			</view>
+			<view class="list-item">
+				<text>记录体温：</text>
 				<slider value="36.5" @change="temperatureChange" min="35" step="0.1" max="40" show-value />
 			</view>
-			<!-- <view class="divider"></view>
-			<view class="list-item">
-				<text>是否接触过确诊人员：</text>
-				<radio-group @change="contactVirusChange">
-					<label>
-						<radio value="1" /><text>是</text>
-						<radio value="0" /><text>否</text>
-					</label>
-				</radio-group>
-			</view>
-			<view v-if="contact_virus.status == 1">
-				<view class="list-item">
-					<text>接触人员姓名：</text>
-					<input v-model="contact_virus.name" placeholder="请输入人员姓名" />
-				</view>
-				<view class="list-item">
-					<text>接触人员电话：</text>
-					<input v-model="contact_virus.contact" placeholder="请输入联系电话" />
-				</view>
-			</view>
-			<view class="divider"></view>
-			<view class="list-item">
-				<text>是否接触过疑似人员：</text>
-				<radio-group @change="contactLikeChange">
-					<label>
-						<radio value="1" /><text>是</text>
-						<radio value="0" /><text>否</text>
-					</label>
-				</radio-group>
-			</view>
-			<view v-if="contact_like_virus.status == 1">
-				<view class="list-item">
-					<text>接触人员姓名：</text>
-					<input v-model="contact_like_virus.name" placeholder="请输入人员姓名" />
-				</view>
-				<view class="list-item">
-					<text>接触人员电话：</text>
-					<input v-model="contact_like_virus.contact" placeholder="请输入联系电话" />
-				</view>
-			</view>
-			<view class="divider"></view>
-			<view class="list-item">
-				<text>是否接触过疫区人员：</text>
-				<radio-group @change="contactVirusRegionChange">
-					<label>
-						<radio value="1" /><text>是</text>
-						<radio value="0" /><text>否</text>
-					</label>
-				</radio-group>
-			</view>
-			<view v-if="contact_like_virus_region.status == 1">
-				<view class="list-item">
-					<text>接触人员姓名：</text>
-					<input v-model="contact_like_virus_region.name" placeholder="请输入人员姓名" />
-				</view>
-				<view class="list-item">
-					<text>接触人员电话：</text>
-					<input v-model="contact_like_virus_region.contact" placeholder="请输入联系电话" />
-				</view>
-			</view>
-			<view class="divider"></view>
-			<view class="list-item">
-				<text>额外信息：</text>
-				<textarea v-model="comment" placeholder="请输入额外信息"></textarea>
-			</view> -->
-			<button @click="submit">提交信息</button>
 		</view>
 		<mpvue-city-picker ref="mpvueCityPicker" :pickerValueDefault="cityPickerValueDefault" @onConfirm="onCityConfirm"></mpvue-city-picker>
 	</view>
@@ -256,6 +134,7 @@
 				}],
 				id_type: 0,
 				id_card: '',
+				plate_number: '',
 				isCn: false,
 				age: 0,
 				sex: 2,
@@ -421,9 +300,23 @@
 					})
 					return false
 				}
-				if (!this.phone) {
+				if (!/^\d{17}[\dxX]$/.test(this.id_card)) {
 					uni.showModal({
-						content: '请填写人员手机号',
+						content: '请正确填写人员身份证号',
+						showCancel: false
+					})
+					return false
+				}
+				if (!/\d{7,11}/.test(this.phone)) {
+					uni.showModal({
+						content: '请正确填写人员联系电话',
+						showCancel: false
+					})
+					return false
+				}
+				if (!this.from_address.addressStr) {
+					uni.showModal({
+						content: '请选择来源地区',
 						showCancel: false
 					})
 					return false
