@@ -245,6 +245,7 @@
 		},
 		data() {
 			return {
+				data: [],
 				cityPickerValueDefault: [0, 0, 1],
 				name: '',
 				idTypeList: [{
@@ -326,6 +327,7 @@
 			},
 		},
 		onLoad(e) {
+			this.init()
 			this.operator_username = e.id
 			if (this.operator_username) {
 				uni.hideTabBar({
@@ -334,6 +336,13 @@
 			}
 		},
 		methods: {
+			async init() {
+				const getData = await this.$cloud.callFunction({
+					name: "get-data",
+					data: {}
+				});
+				this.data = getData.result.data || [];
+			},
 			parseIdCard() {
 				if (this.id_type == 0) {
 					this.isCn = /[^\w\.\/]/.test(this.id_card)
@@ -455,9 +464,35 @@
 				uni.showLoading({
 					title: '上传中...'
 				})
+				let is_danger = false
+				if (this.data.length === 0) {
+					// 第一次没获取到，再获取一次
+					this.init()
+				}
+				if (this.data.length === 0) {
+					// 再次获取还是没有获取到给提示
+					uni.hideLoading()
+					uni.showModal({
+						content: '请重新提交',
+						showCancel: false
+					})
+					return;
+				}
+				if (this.data.length > 0 && traffic.car_plate && check_in_time) {
+					const findData = this.data.find(val => {
+						return (
+							val.t_no
+								.toUpperCase()
+								.includes(traffic.car_plate.toUpperCase()) &&
+							val.t_date.includes(new Date(check_in_time).toISOString().substring(0, 10) || "")
+						);
+					});
+					is_danger = !!findData;
+				}
 				this.$cloud.callFunction({
 					name: 'add-member',
 					data: {
+						is_danger,
 						id_type,
 						id_card,
 						name,
