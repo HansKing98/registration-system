@@ -19,7 +19,7 @@
 				<input :style="{backgroundColor: isCn ? '#EE6A50' : ''}" v-model="id_card" placeholder="请输入证件号码" type="text" />
 			</view>
 			<view class="list-item">
-				<text>车牌号<text class="color-red">*</text>：</text>
+				<text>车牌号：</text>
 				<input v-model="plate_number" placeholder="请输入车牌号" type="text" />
 			</view>
 			<view class="list-item">
@@ -304,13 +304,6 @@
 				if (!/^\d{17}[\dxX]$/.test(this.id_card) && !/^\d{15}$/.test(this.id_card)) {
 					uni.showModal({
 						content: '请正确填写人员身份证号',
-						showCancel: false
-					})
-					return false
-				}
-				if (!this.plate_number) {
-					uni.showModal({
-						content: '请填写人员车牌号',
 						showCancel: false
 					})
 					return false
