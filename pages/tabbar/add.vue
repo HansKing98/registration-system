@@ -129,7 +129,7 @@
 		</view>
 		<view class="list">
 			<view class="list-title">健康状况</view>
-			<view class="list-item">
+			<!-- <view class="list-item">
 				<text>身体状况：</text>
 				<radio-group @change="bodyStatusChange">
 					<label>
@@ -161,12 +161,12 @@
 					<button size="mini">{{bodyStatusTime||'请选择时间'}}</button>
 				</picker>
 			</view>
-			<view class="divider"></view>
+			<view class="divider"></view> -->
 			<view class="list-item">
 				<text>体温：</text>
 				<slider value="36.5" @change="temperatureChange" min="35" step="0.1" max="40" show-value />
 			</view>
-			<view class="divider"></view>
+			<!-- <view class="divider"></view>
 			<view class="list-item">
 				<text>是否接触过确诊人员：</text>
 				<radio-group @change="contactVirusChange">
@@ -230,7 +230,7 @@
 			<view class="list-item">
 				<text>额外信息：</text>
 				<textarea v-model="comment" placeholder="请输入额外信息"></textarea>
-			</view>
+			</view> -->
 			<button @click="submit">提交信息</button>
 		</view>
 		<mpvue-city-picker ref="mpvueCityPicker" :pickerValueDefault="cityPickerValueDefault" @onConfirm="onCityConfirm"></mpvue-city-picker>
