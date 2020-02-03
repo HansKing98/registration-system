@@ -88,7 +88,7 @@ export default {
         .callFunction({
           name: "member-list",
           data: {
-            token: uni.getStorageSync('token'),
+            token: uni.getStorageSync("token"),
             page: this.page,
             length: 15
           }
@@ -106,36 +106,28 @@ export default {
           this.page++;
           this.members.push(...result.data);
           // 检查是否是黑名单
-          this.members.forEach((v, i) => {
-            this.$cloud
-              .callFunction({
-                name: "member-detail",
-                data: {
-                  token: uni.getStorageSync("token"),
-                  id: v._id
-                }
-              })
-              .then(async rsp => {
-                if (this.data.length === 0) {
-                  // 获取第三方库数据
-                  const getData = await this.$cloud.callFunction({
-                    name: "get-data",
-                    data: {}
-                  });
-                  this.data = getData.result.data || [];
-                }
-                if (this.data.length > 0) {
-                  const findData = this.data.find(v => {
-                    return (
-                      (v.t_no).toUpperCase().includes((rsp.result.data.traffic.car_plate).toUpperCase()) &&
-                      v.t_date.includes(rsp.result.data.check_in_time || "")
-                    );
-                  });
-                  v.isDanger = !!findData;
-                  // this.members[i] = v;
-                  this.$set(this.members, i, v);
-                }
+          this.members.forEach(async (v, i) => {
+            if (this.data.length === 0) {
+              // 获取第三方库数据
+              const getData = await this.$cloud.callFunction({
+                name: "get-data",
+                data: {}
               });
+              this.data = getData.result.data || [];
+            }
+            if (this.data.length > 0 && v.traffic.car_plate && v.check_in_time) {
+              const findData = this.data.find(val => {
+                return (
+                  val.t_no
+                    .toUpperCase()
+                    .includes(v.traffic.car_plate.toUpperCase()) &&
+                  val.t_date.includes(v.check_in_time.substring(0, 10) || "")
+                );
+              });
+              v.isDanger = !!findData;
+              // this.members[i] = v;
+              this.$set(this.members, i, v);
+            }
           });
         })
         .catch(err => {
