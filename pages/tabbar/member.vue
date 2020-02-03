@@ -88,6 +88,7 @@ export default {
         .callFunction({
           name: "member-list",
           data: {
+            token: uni.getStorageSync('token'),
             page: this.page,
             length: 15
           }
