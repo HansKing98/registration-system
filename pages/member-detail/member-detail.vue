@@ -147,6 +147,7 @@
 				this.$cloud.callFunction({
 					name: 'member-detail',
 					data: {
+						token: uni.getStorageSync('token'),
 						id
 					}
 				}).then(({

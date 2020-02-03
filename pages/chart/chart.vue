@@ -54,7 +54,9 @@
 				});
 				this.$cloud.callFunction({
 					name: 'chart-member-list',
-					data: {}
+					data: {
+						token: uni.getStorageSync('token'),
+					}
 				}).then((res) => {
 					uni.hideLoading()
 					if (res.result.code === 0) {

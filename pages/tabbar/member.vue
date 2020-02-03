@@ -109,6 +109,7 @@ export default {
               .callFunction({
                 name: "member-detail",
                 data: {
+                  token: uni.getStorageSync('token'),
                   id: v._id
                 }
               })
