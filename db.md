@@ -31,6 +31,7 @@ member
     guid: "", // string 用户唯一标识，添加时生成无法修改
     id_type: 0, // int 证件类型 0 身份证, 1 护照
     id_card: "", // string 证件号码，需验证符合规则
+	plate_number: '', //车牌号
     name: "", // string 不能为空
     phone: "", // string 不能为空，需验证符合规则
     age: 18, // int
@@ -52,7 +53,6 @@ member_list
 {
 	_id: "", // string，自生成
 	id_card: 0, // 关联身份证ID
-	plate_number: '', //车牌号
 	status: 0, // 0正常, 1删除
 	from_address: {country: 0, province: 0, city: 0, district: 0, street: ""}, // 来自地区
 	from_hb: 0, // 默认0，没有来之湖北
