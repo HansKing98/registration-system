@@ -8,7 +8,7 @@
 			<%= htmlWebpackPlugin.options.title %>
 		</title>
 		<script>
-			if (window.innerWidth > 960 && location.host !== 'localhost') {
+			if (window.innerWidth > 960 && location.hostname !== 'localhost') {
 				location.href = '//uniapp.dcloud.io/pc.html#' + encodeURIComponent(location.href)
 			}
 		</script>
