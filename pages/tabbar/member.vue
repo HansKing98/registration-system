@@ -130,7 +130,7 @@ export default {
                       v.t_date.includes(rsp.result.data.check_in_time || "")
                     );
                   });
-                  v.isDanger = findData && !!findData.t_no_sub;
+                  v.isDanger = !!findData;
                   // this.members[i] = v;
                   this.$set(this.members, i, v);
                 }
