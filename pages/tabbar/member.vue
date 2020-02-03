@@ -142,7 +142,7 @@ export default {
                   val.t_date.includes(v.check_in_time.substring(0, 10) || "")
                 );
               });
-              v.isDanger = !!findData;
+              v.is_danger = !!findData;
               // this.members[i] = v;
               this.$set(this.members, i, v);
             }
