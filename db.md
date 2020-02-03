@@ -50,21 +50,22 @@ member
 // 新增成员登记, 需要检测 member表中是否存在 id_card，同一个人可以增加多条记录
 member_list
 {
-    _id: "", // string，自生成
-    id_card: 0, // 关联身份证ID
-    status: 0, // 0正常, 1删除
-    from_address: {country: 0, province: 0, city: 0, district: 0, street: ""}, // 来自地区
-    from_hb: 0, // 默认0，没有来之湖北
-    traffic: {type: 0, car_plate: ""}, // 交通工具类型 0列车、1自驾车牌号 2公共汽车
-    temperature: 0, // 体温
-    check_in_address: {country: 0, province: 0, city: 0, district: 0, street: ""}, // 现住址
-    check_in_time: 0, // 入住时间 时间戳 GMT
-    body_status: {status: 0, time: 0}, // int 0普通、1居家隔离、2发烧、3疑似、4确诊、5死亡， 每个状态对应的发生时间，如隔离时间、确诊时间、死亡时间
-    contact_virus: {status: 0, name: "", contact: ""}, // 0没有, 1有，是否接触过确诊人员、对方姓名和联系方式
-    contact_like_virus: {status: 0, name: "", contact: ""}, // 0没有, 1有，是否接触过疑似人员、对方姓名和联系方式
-    contact_like_virus_region: {status: 0, name: "", contact: ""}, // 0没有, 1有，是否接触过来自疫区的人员、对方姓名和联系方式
-    comment: "", // 备注
-    create_time: 0, // 时间戳 GMT
+	_id: "", // string，自生成
+	id_card: 0, // 关联身份证ID
+	status: 0, // 0正常, 1删除
+	from_address: {country: 0, province: 0, city: 0, district: 0, street: ""}, // 来自地区
+	from_hb: 0, // 默认0，没有来之湖北
+	traffic: {type: 0, car_plate: ""}, // 交通工具类型 0列车、1自驾车牌号 2公共汽车
+	temperature: 0, // 体温
+	check_in_address: {country: 0, province: 0, city: 0, district: 0, street: ""}, // 现住址
+	check_in_time: 0, // 入住时间 时间戳 GMT
+	body_status: {status: 0, time: 0}, // int 0普通、1居家隔离、2发烧、3疑似、4确诊、5死亡， 每个状态对应的发生时间，如隔离时间、确诊时间、死亡时间
+	contact_virus: {status: 0, name: "", contact: ""}, // 0没有, 1有，是否接触过确诊人员、对方姓名和联系方式
+	contact_like_virus: {status: 0, name: "", contact: ""}, // 0没有, 1有，是否接触过疑似人员、对方姓名和联系方式
+	contact_like_virus_region: {status: 0, name: "", contact: ""}, // 0没有, 1有，是否接触过来自疫区的人员、对方姓名和联系方式
+	comment: "", // 备注
+	create_time: 0, // 时间戳 GMT
+	access: {name:"", phone:"", comment:""}, // 到访单位信息，联系人姓名、联系人电话、事由
 }
 ```
 

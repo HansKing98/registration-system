@@ -32,8 +32,35 @@
 				</radio-group>
 			</view>
 			<view class="list-item">
+				<text>是否本地户籍： </text>
+				<radio-group @change="nativeChange">
+					<label>
+						<radio value="1" /><text>是</text>
+						<radio value="0" /><text>否</text>
+					</label>
+				</radio-group>
+			</view>
+			<view class="list-item">
 				<text>联系电话<text class="color-red">*</text>： </text>
 				<input v-model="phone" value="" placeholder="请输入联系电话" />
+			</view>
+		</view>
+		<view class="list">
+			<view class="list-title">到访信息</view>
+			<!-- <view class="list-item">
+				<text>到访单位<text class="color-red">*</text>：</text><input v-model="" placeholder="请输单位名称" />
+			</view> -->
+			<view class="list-item">
+				<text>本单位联系人：</text>
+				<input v-model="access.name" placeholder="请输入联系人姓名" />
+			</view>
+			<view class="list-item">
+				<text>联系人电话： </text>
+				<input v-model="access.phone" placeholder="请输入联系电话" />
+			</view>
+			<view class="list-item">
+				<text>到访事由：</text>
+				<input v-model="access.comment" placeholder="请输入到访事由" />
 			</view>
 		</view>
 		<view class="list">
@@ -232,6 +259,7 @@
 				isCn: false,
 				age: 20,
 				sex: 2,
+				native: 2,
 				phone: '',
 				from_hb: 0,
 				from_wh: 0,
@@ -270,7 +298,12 @@
 					contact: ''
 				},
 				comment: '',
-				operator_username: ''
+				operator_username: '',
+				access: {
+					name: '',
+					phone: '',
+					comment: ''
+				}
 			}
 		},
 		computed: {
@@ -325,6 +358,9 @@
 			},
 			sexChange(e) {
 				this.sex = e.detail.value
+			},
+			nativeChange(e) {
+				this.native = e.detail.value
 			},
 			fromHbChange(e) {
 				this.from_hb = e.detail.value
@@ -400,6 +436,7 @@
 					phone,
 					age,
 					sex,
+					native,
 					from_address,
 					from_hb,
 					from_wh,
@@ -412,7 +449,8 @@
 					contact_like_virus,
 					contact_like_virus_region,
 					comment,
-					operator_username
+					operator_username,
+					access
 				} = this
 				uni.showLoading({
 					title: '上传中...'
@@ -426,6 +464,7 @@
 						phone,
 						age,
 						sex,
+						native,
 						from_address,
 						from_hb,
 						from_wh,
@@ -439,7 +478,8 @@
 						contact_like_virus_region,
 						comment,
 						token: uni.getStorageSync('token'),
-						operator_username
+						operator_username,
+						access
 					}
 				}).then((res) => {
 					uni.hideLoading()

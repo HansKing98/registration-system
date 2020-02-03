@@ -15,10 +15,17 @@
 			<view class="xq-list">
 				<view class="items">姓名：{{ryinfo['name']}}</view>
 				<view class="items">性别：{{ryinfo.sex|sex}}</view>
+				<view class="items">是否本地户籍：{{ryinfo.native|boolean}}</view>
 				<view class="items">年龄：{{ryinfo['age']}}岁</view>
 				<view class="items">证件类型：{{ryinfo.id_type|idType}}</view>
 				<view class="items">证件号码：{{ryinfo.id_card||'未知'}}</view>
 				<view class="items">联系电话：{{ryinfo.phone}}</view>
+			</view>
+			<view class="xq-title">到访信息</view>
+			<view class="xq-list">
+				<view class="items">本单位联系人：{{ryinfo.access.name||'无'}}</view>
+				<view class="items">联系人电话：{{ryinfo.access.phone||'无'}}</view>
+				<view class="items">到访事由：{{ryinfo.access.comment||'无'}}</view>
 			</view>
 			<view class="xq-title">来源地信息</view>
 			<view class="xq-list">
@@ -82,18 +89,19 @@
 					traffic: {},
 					contact_virus: {},
 					contact_like_virus: {},
-					contact_like_virus_region: {}
+					contact_like_virus_region: {},
+					access: {}
 				},
 				showxg: 1,
 				showxq: 1
 			}
 		},
 		filters: {
-			idType(val = 0) {
-				return (['身份证', '护照'])[val]
+			idType(val) {
+				return (['身份证', '护照'])[val] || '未知'
 			},
-			boolean(val = 1) {
-				return val ? '是' : '否'
+			boolean(val) {
+				return (['否', '是'])[val] || '未知'
 			},
 			trafficType(val) {
 				return (trafficType)[val] || '未知'
@@ -112,7 +120,7 @@
 				return `${date.getFullYear()}年${date.getMonth()+1}月${date.getDate()}日 ${date.getHours()}时${date.getMinutes()}分${date.getSeconds()}秒`
 			},
 			sex(val) {
-				return val ? (['女', '男'])[val] || '未知' : '未知'
+				return (['女', '男'])[val] || '未知'
 			}
 		},
 		onLoad({
