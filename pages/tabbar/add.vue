@@ -5,15 +5,6 @@
 			<view class="list-title">人员信息</view>
 			<view class="list-item">
 				<text>姓名<text class="color-red">*</text>：</text><input v-model="name" value="" placeholder="请输入人员姓名" /></view>
-			<!-- <view class="list-item">
-				<text>证件类型：</text>
-				<picker mode="selector" range-key="label" :range="idTypeList" @change="idTypeChange">
-					<view class="xiala">
-						<text>{{idTypeList[id_type].label}}</text>
-						<image src="/static/xl.png"></image>
-					</view>
-				</picker>
-			</view> -->
 			<view class="list-item">
 				<text>身份证号<text class="color-red">*</text>：</text>
 				<input :style="{backgroundColor: isCn ? '#EE6A50' : ''}" v-model="id_card" placeholder="请输入证件号码" type="text" />
@@ -28,7 +19,7 @@
 			</view>
 			<view class="list-item">
 				<text>是否本地户籍： </text>
-				<radio-group @change="nativeChange">
+				<radio-group v-if="!destroy" @change="nativeChange">
 					<label>
 						<radio value="1" /><text>是</text>
 						<radio value="0" /><text>否</text>
@@ -37,33 +28,20 @@
 			</view>
 			<view class="list-item">
 				<text>是否来自湖北： </text>
-				<radio-group @change="fromHbChange">
+				<radio-group v-if="!destroy" @change="fromHbChange">
 					<label>
 						<radio value="1" /><text>是</text>
 						<radio value="0" /><text>否</text>
 					</label>
 				</radio-group>
 			</view>
-			<!-- <view class="list-item">
-				<text>是否来自武汉： </text>
-				<radio-group @change="fromWhChange">
-					<label>
-						<radio value="1" /><text>是</text>
-						<radio value="0" /><text>否</text>
-					</label>
-				</radio-group>
-			</view> -->
 			<view class="list-item">
 				<text>来源地区<text class="color-red">*</text>：</text>
 				<input @click="showCityPicker('from_address')" disabled="disabled" placeholder="请输入地址" :value="from_address.addressStr" />
 			</view>
-			<!-- <view class="list-item">
-				<text>来源地详细地址： </text>
-				<input v-model="from_address.street" placeholder="请输入地址" />
-			</view> -->
 			<view class="list-item">
 				<text>春运出行方式：</text>
-				<radio-group @change="trafficTypeChange">
+				<radio-group v-if="!destroy" @change="trafficTypeChange">
 					<label>
 						<radio value="0" /><text>火车</text>
 					</label>
@@ -91,9 +69,6 @@
 		</view>
 		<view class="list">
 			<view class="list-title">到访信息</view>
-			<!-- <view class="list-item">
-				<text>到访单位<text class="color-red">*</text>：</text><input v-model="" placeholder="请输单位名称" />
-			</view> -->
 			<view class="list-item">
 				<text>本单位联系人：</text>
 				<input v-model="access.name" placeholder="请输入联系人姓名" />
@@ -108,7 +83,7 @@
 			</view>
 			<view class="list-item">
 				<text>记录体温：</text>
-				<slider value="36.5" @change="temperatureChange" min="35" step="0.1" max="40" show-value />
+				<slider :value="temperature" @change="temperatureChange" min="35" step="0.1" max="40" show-value />
 			</view>
 			<button @click="submit">提交信息</button>
 		</view>
@@ -123,69 +98,9 @@
 			mpvueCityPicker
 		},
 		data() {
-			return {
-				data: [],
-				cityPickerValueDefault: [0, 0, 1],
-				name: '',
-				idTypeList: [{
-					label: '身份证',
-					value: 0
-				}, {
-					label: '护照',
-					value: 1
-				}],
-				id_type: 0,
-				id_card: '',
-				plate_number: '',
-				isCn: false,
-				age: 0,
-				sex: 2,
-				native: 2,
-				phone: '',
-				from_hb: 0,
-				from_wh: 0,
-				from_address: {
-					addressStr: '',
-					street: ''
-				},
-				traffic: {
-					type: -1
-				},
-				check_in_address: {
-					addressStr: '',
-					street: ''
-				},
-				checkInTimeStr: '',
-				body_status: {
-					status: 0,
-					time: Date.now()
-				},
-				bodyStatusDate: '',
-				bodyStatusTime: '',
-				temperature: 36.5,
-				contact_virus: {
-					status: '',
-					name: '',
-					contact: ''
-				},
-				contact_like_virus: {
-					status: '',
-					name: '',
-					contact: ''
-				},
-				contact_like_virus_region: {
-					status: '',
-					name: '',
-					contact: ''
-				},
-				comment: '',
-				operator_username: '',
-				access: {
-					name: '',
-					phone: '',
-					comment: ''
-				}
-			}
+			return Object.assign(this.getDefaultData(), {
+				destroy: false
+			})
 		},
 		computed: {
 			check_in_time: function() {
@@ -302,6 +217,79 @@
 			contactVirusRegionChange(e) {
 				this.contact_like_virus_region.status = e.detail.value
 			},
+			getDefaultData(){
+				return {
+					data: [],
+					cityPickerValueDefault: [0, 0, 1],
+					name: '',
+					idTypeList: [{
+						label: '身份证',
+						value: 0
+					}, {
+						label: '护照',
+						value: 1
+					}],
+					id_type: 0,
+					id_card: '',
+					plate_number: '',
+					isCn: false,
+					age: 0,
+					sex: 2,
+					native: 2,
+					phone: '',
+					from_hb: 0,
+					from_wh: 0,
+					from_address: {
+						addressStr: '',
+						street: ''
+					},
+					traffic: {
+						type: -1
+					},
+					check_in_address: {
+						addressStr: '',
+						street: ''
+					},
+					checkInTimeStr: '',
+					body_status: {
+						status: 0,
+						time: Date.now()
+					},
+					bodyStatusDate: '',
+					bodyStatusTime: '',
+					temperature: 36.5,
+					contact_virus: {
+						status: '',
+						name: '',
+						contact: ''
+					},
+					contact_like_virus: {
+						status: '',
+						name: '',
+						contact: ''
+					},
+					contact_like_virus_region: {
+						status: '',
+						name: '',
+						contact: ''
+					},
+					comment: '',
+					operator_username: '',
+					access: {
+						name: '',
+						phone: '',
+						comment: ''
+					}
+				}
+			},
+			reset() {
+				const defaultData = this.getDefaultData()
+				Object.assign(this, defaultData)
+				this.destroy = true
+				this.$nextTick(() => {
+					this.destroy = false
+				})
+			},
 			submit() {
 				if (!this.name) {
 					uni.showModal({
@@ -415,9 +403,10 @@
 					uni.hideLoading()
 					if (res.result.code === 0) {
 						uni.showModal({
-							content: '信息上传完成，请勿重复提交',
+							content: '提交成功',
 							showCancel: false
 						})
+						this.reset()
 					} else if (res.result.errCode === 'TOKEN_INVALID') {
 						uni.showModal({
 							content: '登录状态无效，请重新登录',
