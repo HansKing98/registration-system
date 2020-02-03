@@ -29,11 +29,13 @@
 }
 ```
 
-然后就可以在前端界面里，用上述账户密码登陆了
+//数据库内存储的是加密之后的密码，登录依然使用123456作为密码
+
+然后就可以在前端界面里，用上述账户密码登陆了。
 
 **注意**
 
-- 实际部署时切记更换`cloudfunctions-module/src/utils/constants.js`内的`passSecret`，更换之后重新编译云函数，导入操作员信息
+- 实际部署时切记更换`cloudfunctions-module/src/utils/constants.js`内的`passSecret`，更换之后重新编译上传云函数，导入操作员信息
 
 ## 人员信息字段说明
 
