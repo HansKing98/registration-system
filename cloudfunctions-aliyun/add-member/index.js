@@ -300,7 +300,6 @@ const defaultRecordInfo = {
 	status: '',
 	// 来自地区 {country: 0, province: 0, city: 0, district: 0, street: ""}
 	from_address: null,
-	is_danger: false,
 	from_hb: 0,
 	from_wh: 0,
 	// type:交通工具类型 0列车、1自驾车牌号、2公共汽车 car_plate: 交通工具信息
