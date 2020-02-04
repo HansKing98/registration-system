@@ -195,19 +195,19 @@
 
 <style>
 	page {
-		background: #f0f0f0;
+		background: #ffffff;
 	}
 
 	.ryxq {
 		display: flex;
 		width: 750upx;
-		height: 100%;
+		/* height: 100%; */
 		background: #ffffff;
 
-		position: fixed;
+		/* position: fixed;
 		z-index: 99;
 		margin-top: 0upx;
-		top: 0upx;
+		top: 0upx; */
 		flex-direction: column;
 		overflow: auto;
 
