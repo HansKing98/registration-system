@@ -105,11 +105,14 @@
 				uni.showLoading();
 				var startDate = '';
 				var endDate = '';
-				if (this.startDate != '') {
+				if (this.startDate && this.startDate!='') {
 					startDate = new Date(this.startDate).toISOString();
 					endDate = new Date(this.endDate).toISOString();
+				} else if (this.index === 2){
+					// 如果日期没选择成功就index就会走普通逻辑，就得把index还原
+					this.index = 0
 				}
-				_this.$cloud.callFunction({
+				this.$cloud.callFunction({
 					name: 'search',
 					data: {
 						token: uni.getStorageSync('token'),
