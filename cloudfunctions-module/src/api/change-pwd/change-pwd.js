@@ -13,6 +13,11 @@ const {
 
 const db = uniCloud.database()
 exports.main = async (event = {}, context) => {
+	return {
+		code: -1,
+		errCode: '__',
+		msg: '演示系统的公共账户不支持修改密码'
+	}
 	let validateResult
 	try {
 		validateResult = await validateToken(event.token)
