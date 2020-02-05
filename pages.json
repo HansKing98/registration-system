@@ -82,7 +82,8 @@
 			{
 				"pagePath": "pages/tabbar/add",
 				"iconPath": "static/tab-icon/plus.png",
-				"selectedIconPath": "static/tab-icon/plus-on.png"
+				"selectedIconPath": "static/tab-icon/plus-on.png",
+				"text": "新增"
 			},
 			{
 				"pagePath": "pages/tabbar/search",
