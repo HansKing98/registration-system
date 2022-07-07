@@ -16,7 +16,7 @@
   "dependencies": {
     "file-saver": "^2.0.2",
     "lodash": "^4.17.15",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "xlsx": "^0.15.5"
   }
 }
